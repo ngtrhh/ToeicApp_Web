@@ -1,0 +1,50 @@
+.leftbar li {
+  margin-top: 5px;
+}
+.TextNormal {
+  background-color: white;
+  color: black;
+}
+.TextClick {
+  background-color: #5da110;
+  /* text-decoration: underline; */
+  font-size: 16px;
+  /* border-radius: 8%; */
+}
+.testitem-wrapper {
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  padding: 16px;
+  background-color: #fff;
+  display: block;
+  width: 280px;
+}
+
+.testitem-wrapper:hover {
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+.text-dark {
+  color: #333;
+}
+
+.testitem-info {
+  font-size: 16px;
+  color: #888;
+}
+.Qicon {
+  margin-left: 5px;
+}
+.testname-wrapper {
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  background-color: #fff;
+  padding-right: 40px;
+  padding-left: 20px;
+  margin-bottom: 20px;
+}
+.grid-container {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  grid-gap: 10px;
+  overflow: hidden;
+}

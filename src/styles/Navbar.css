@@ -1,0 +1,22 @@
+#topNav .nav-link {
+  color: white;
+  font-weight: 600;
+}
+
+#topNav .nav-link:hover,
+#topNav .nav-item > .active {
+  color: #88db3b;
+}
+
+#topNav {
+  width: fit-content;
+  justify-content: center;
+}
+
+@media (min-width: 0px) and (max-width: 991px) {
+  #topNav {
+    width: 100%;
+    justify-content: space-between;
+    padding: 4px 20px;
+  }
+}
