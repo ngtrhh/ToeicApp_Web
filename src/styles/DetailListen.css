@@ -1,0 +1,36 @@
+.muiInput {
+  position: relative;
+  padding: 16.5px 14px;
+  border: 1px solid #79747e;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  border-radius: 4px;
+
+  .muiLabel {
+    position: absolute;
+    top: -10px;
+    left: 13px;
+    color: #79747e;
+    font-size: 0.75em;
+    background: #f5f5f5;
+    padding-inline-start: 2px;
+    padding-inline-end: 2px;
+  }
+
+  input {
+    border: none;
+    background-color: transparent;
+    box-shadow: none;
+    padding: 0;
+  }
+}
+
+textarea,
+input {
+  box-shadow: none;
+}
+
+input[type="file"].disabled {
+  pointer-events: none;
+}

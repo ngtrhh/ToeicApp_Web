@@ -1,5 +1,6 @@
 import React from "react";
 import {
+  Collapse,
   Drawer,
   List,
   ListItemButton,
@@ -10,14 +11,30 @@ import {
   SettingsOutlined,
   PermContactCalendarOutlined,
   VerifiedOutlined,
-  MapsHomeWorkOutlined,
   Home,
+  ArtTrack,
+  ExpandLess,
+  ExpandMore,
+  Headphones,
+  Book,
+  Mic,
+  Edit,
 } from "@mui/icons-material";
-import { Link, useLocation } from "react-router-dom";
+import { Link, NavLink, useLocation } from "react-router-dom";
 import Logo from "../assets/penguin.png";
+import "../styles/Navbar.css";
 
-const Sidebar = () => {
-  const path = useLocation().pathname.split("/")[0];
+const Sidebar = ({ width }) => {
+  const [openQuestion, setOpenQuestion] = React.useState(false);
+
+  const openCollapse = () => {
+    setOpenQuestion(true);
+  };
+
+  const closeCollapse = () => {
+    setOpenQuestion(false);
+  };
+
   return (
     <Drawer
       variant="permanent"
@@ -31,52 +48,106 @@ const Sidebar = () => {
           boxSizing: "border-box",
           padding: 1,
           boxShadow: "0 2px 4px 0 rgba(0, 0, 0, 0.1)",
-          width: 240,
+          width,
         },
       }}
     >
-      <div className="d-flex w-100 justify-content-center align-items-center mb-4">
+      <div className="d-flex w-100 justify-content-center align-items-center my-4">
         <img src={Logo} width={80} height={80} />
       </div>
       <List component="nav">
-        <Link to="/" className="">
-          <ListItemButton
-            className={path === "" ? "bg-primary text-light" : ""}
-          >
+        <NavLink to="/" className="nav-link" onClick={closeCollapse}>
+          <ListItemButton>
             <ListItemIcon>
-              <Home sx={{ color: path === "" ? "#ffffff" : "" }} />
+              <Home />
             </ListItemIcon>
             <ListItemText primary="Home" />
           </ListItemButton>
-        </Link>
-        <ListItemButton
-          className={path === "vocab" ? "bg-primary text-light" : ""}
-        >
+        </NavLink>
+
+        <ListItemButton onClick={openCollapse}>
           <ListItemIcon>
-            <MapsHomeWorkOutlined />
+            <ArtTrack />
           </ListItemIcon>
-          <ListItemText primary="Factory Audit Order" />
+          <ListItemText primary="Question" />
+          {openQuestion ? <ExpandLess /> : <ExpandMore />}
         </ListItemButton>
-        <ListItemButton>
-          <ListItemIcon>
-            <VerifiedOutlined />
-          </ListItemIcon>
-          <ListItemText primary="User management" />
-        </ListItemButton>
-        <Link to="/client">
+
+        <Collapse in={openQuestion} timeout="auto" unmountOnExit>
+          <List component="div" disablePadding>
+            <NavLink to="/question/listening">
+              <ListItemButton sx={{ pl: 4 }}>
+                <ListItemIcon>
+                  <Headphones />
+                </ListItemIcon>
+                <ListItemText primary="Listening" className="text-dark" />
+              </ListItemButton>
+            </NavLink>
+
+            <NavLink to="/question/reading">
+              <ListItemButton sx={{ pl: 4 }}>
+                <ListItemIcon>
+                  <Book />
+                </ListItemIcon>
+                <ListItemText primary="Reading" className="text-dark" />
+              </ListItemButton>
+            </NavLink>
+
+            <NavLink to="/question/speaking">
+              <ListItemButton sx={{ pl: 4 }}>
+                <ListItemIcon>
+                  <Mic />
+                </ListItemIcon>
+                <ListItemText primary="Speaking" className="text-dark" />
+              </ListItemButton>
+            </NavLink>
+
+            <NavLink to="/question/writing">
+              <ListItemButton sx={{ pl: 4 }}>
+                <ListItemIcon>
+                  <Edit />
+                </ListItemIcon>
+                <ListItemText primary="Writing" className="text-dark" />
+              </ListItemButton>
+            </NavLink>
+          </List>
+        </Collapse>
+
+        <NavLink to="/vocabulary" className="nav-link">
+          <ListItemButton>
+            <ListItemIcon>
+              <VerifiedOutlined />
+            </ListItemIcon>
+            <ListItemText primary="Vocabulary" />
+          </ListItemButton>
+        </NavLink>
+
+        <NavLink to="/test" className="nav-link">
           <ListItemButton>
             <ListItemIcon>
               <PermContactCalendarOutlined />
             </ListItemIcon>
-            <ListItemText primary="Client Management" />
+            <ListItemText primary="Test" />
           </ListItemButton>
-        </Link>
-        <ListItemButton>
-          <ListItemIcon>
-            <SettingsOutlined />
-          </ListItemIcon>
-          <ListItemText primary="Admin" />
-        </ListItemButton>
+        </NavLink>
+
+        <NavLink to="/forum" className="nav-link">
+          <ListItemButton>
+            <ListItemIcon>
+              <SettingsOutlined />
+            </ListItemIcon>
+            <ListItemText primary="Forum" />
+          </ListItemButton>
+        </NavLink>
+
+        <NavLink to="/user" className="nav-link">
+          <ListItemButton>
+            <ListItemIcon>
+              <SettingsOutlined />
+            </ListItemIcon>
+            <ListItemText primary="User" />
+          </ListItemButton>
+        </NavLink>
       </List>
     </Drawer>
   );

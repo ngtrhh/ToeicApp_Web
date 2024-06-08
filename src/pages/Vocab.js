@@ -55,7 +55,7 @@ function Vocab() {
   };
 
   const viewTopic = (item) => {
-    navigate("/Vocab/" + item.Id, {
+    navigate("/vocabulary/" + item.Id, {
       state: { TopicId: item.Id, TopicName: item.Topic },
     });
   };

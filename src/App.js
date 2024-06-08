@@ -2,12 +2,18 @@ import React from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import Home from "./pages/Home";
-import Questions from "./pages/Questions";
+import ListeningQuestion from "./pages/ListeningQuestion";
+import ReadingQuestion from "./pages/ReadingQuestion";
+import SpeakingQuestion from "./pages/SpeakingQuestion";
+import DetailQuestion from "./pages/question/DetailQuestion";
 import Vocab from "./pages/Vocab";
 import VocabPage from "./pages/VocabPage";
 import Test from "./pages/Test";
+import Forum from "./pages/Forum";
+import User from "./pages/User";
 import Sidebar from "./components/Sidebar";
 import { Box } from "@mui/material";
+import WritingQuestion from "./pages/WritingQuestion";
 
 const SIDEBAR_WIDTH = 240;
 
@@ -18,14 +24,14 @@ function App() {
         <Navbar />
 
         <div className="flex-row">
-          <Sidebar />
+          <Sidebar width={SIDEBAR_WIDTH} />
 
           <Box
             component="main"
             pl={`${SIDEBAR_WIDTH}px`}
             pt={"64px"}
             flex={1}
-            minHeight="calc(100dvh - 64px)"
+            minHeight="100vh"
             overflow="auto"
             sx={{
               backgroundColor: "#f5f5f5",
@@ -38,15 +44,43 @@ function App() {
           >
             <Routes>
               <Route path="/" exact Component={Home} />
-              <Route path="/Question" exact Component={Questions} />
-              <Route path="/Vocab" exact Component={Vocab} />
-              <Route path="/Vocab/:id" exact Component={VocabPage} />
-              <Route path="/Test" exact Component={Test} />
+              <Route
+                path="/question/listening"
+                exact
+                Component={ListeningQuestion}
+              />
+              <Route
+                path="/question/reading"
+                exact
+                Component={ReadingQuestion}
+              />
+              <Route
+                path="/question/speaking"
+                exact
+                Component={SpeakingQuestion}
+              />
+              <Route
+                path="/question/writing"
+                exact
+                Component={WritingQuestion}
+              />
+              <Route path="/question/add" exact Component={DetailQuestion} />
+              <Route
+                path="/question/:id/edit"
+                exact
+                Component={DetailQuestion}
+              />
+              <Route path="/question/:id" exact Component={DetailQuestion} />
+              <Route path="/vocabulary" exact Component={Vocab} />
+              <Route path="/vocabulary/:id" exact Component={VocabPage} />
+              <Route path="/test" exact Component={Test} />
+              <Route path="/forum" exact Component={Forum} />
+              <Route path="/user" exact Component={User} />
+              {/* <Route path="/ReadPdf" exact element={<ReadPdf />} /> */}
               {/*
-          <Route path="/Forum" exact element={<Forum />} />
-          <Route path="/User" exact element={<User />} />
-          <Route path="/ReadPdf" exact element={<ReadPdf />} />
-          <Route path="/QuestionPage" exact element={<QuestionPage />} />
+          
+          
+          <Route path="/QuestionPage" exact element={< />} />
           <Route path="/Test/:id" exact element={<TestView />} />
           <Route path="/Test/add" exact element={<CreateTest />} /> */}
             </Routes>

@@ -1,11 +1,25 @@
-#topNav .nav-link {
-  color: white;
-  font-weight: 600;
+.MuiListItemIcon-root {
+  min-width: 40px !important;
 }
 
-#topNav .nav-link:hover,
-#topNav .nav-item > .active {
-  color: #88db3b;
+.active {
+  .MuiListItemButton-root,
+  .MuiListItemButton-root:hover {
+    background-color: var(--bs-primary);
+    color: var(--bs-light);
+
+    .MuiTypography-root {
+      font-weight: 500;
+    }
+
+    .MuiListItemIcon-root {
+      color: inherit !important;
+    }
+
+    .MuiSvgIcon-roots {
+      color: inherit !important;
+    }
+  }
 }
 
 #topNav {
