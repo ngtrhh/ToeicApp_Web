@@ -4,7 +4,6 @@ import { Button, TextField } from "@mui/material";
 import api from "../../api/Api";
 import upload from "../../api/upload";
 import NotificationModal from "../../components/NotificationModal";
-import NoteCard from "../../components/NoteCard";
 import "../../styles/DetailListen.css";
 
 function SpeakPart4({ item, complete, flag, index }) {
@@ -132,22 +131,191 @@ function SpeakPart4({ item, complete, flag, index }) {
   };
 
   return (
-    <div className="container d-flex p-4">
-      <div style={{ width: "70%" }}>
-        <h2>
-          {flag === "submit"
-            ? "Add Question Speaking Part 4"
-            : `Question ${item.Order}`}
-        </h2>
+    <div className="d-flex p-4 flex-column">
+      <h2>
+        {flag === "submit"
+          ? "Add Question Speaking Part 4"
+          : `Question ${item.Order}`}
+      </h2>
 
-        {flag === "view" ? (
+      {flag === "view" ? (
+        <div className="d-flex flex-column gap-4">
+          <div className="muiInput">
+            <label className="muiLabel">Available Information</label>
+            <input
+              type="file"
+              accept="image/*"
+              className="disabled"
+              onChange={handleImageChange}
+            />
+          </div>
+
+          <TextField
+            label="or input the link"
+            type="url"
+            onChange={(e) => setImageFile(e.target.value)}
+            value={item.AvailableInfo}
+          />
+
+          <div>
+            <div>Question:</div>
+            <div className="d-flex flex-column gap-4">
+              <div className="d-flex gap-4 align-items-center">
+                <h5>1.</h5>
+                <TextField
+                  className="w-100"
+                  type="text"
+                  value={item?.Question[0]}
+                  size="small"
+                  onChange={(e) => handleSetQuestion(0, e.target.value)}
+                />
+              </div>
+              <div className="d-flex gap-4 align-items-center">
+                <h5>2.</h5>
+                <TextField
+                  className="w-100"
+                  type="text"
+                  value={item?.Question[1]}
+                  size="small"
+                  onChange={(e) => handleSetQuestion(1, e.target.value)}
+                />
+              </div>
+              <div className="d-flex gap-4 align-items-center">
+                <h5>3.</h5>
+                <TextField
+                  className="w-100"
+                  type="text"
+                  value={item?.Question[2]}
+                  size="small"
+                  onChange={(e) => handleSetQuestion(2, e.target.value)}
+                />
+              </div>
+            </div>
+          </div>
+
+          <TextField
+            label="Context Translation"
+            value={item.Explain.Translation[0]}
+            onChange={(e) => handleSetTrans(0, e.target.value)}
+            rows="4"
+            multiline
+          />
+          <div>
+            <div>Question Translation:</div>
+            <div className="d-flex flex-column gap-4">
+              <div className="d-flex gap-4 align-items-center">
+                <h5>1.</h5>
+                <TextField
+                  className="w-100"
+                  type="text"
+                  value={item.Explain.Translation[1]}
+                  size="small"
+                  onChange={(e) => handleSetTrans(1, e.target.value)}
+                />
+              </div>
+              <div className="d-flex gap-4 align-items-center">
+                <h5>2.</h5>
+                <TextField
+                  className="w-100"
+                  type="text"
+                  value={item.Explain.Translation[2]}
+                  size="small"
+                  onChange={(e) => handleSetTrans(2, e.target.value)}
+                />
+              </div>
+              <div className="d-flex gap-4 align-items-center">
+                <h5>3.</h5>
+                <TextField
+                  className="w-100"
+                  type="text"
+                  value={item.Explain.Translation[3]}
+                  size="small"
+                  onChange={(e) => handleSetTrans(3, e.target.value)}
+                />
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <div>Sample Answer:</div>
+            <div className="d-flex flex-column gap-4">
+              <div className="d-flex gap-4 align-items-center">
+                <h5>1.</h5>
+                <TextField
+                  className="w-100"
+                  type="text"
+                  value={item.Explain.SampleAnswer[0]}
+                  size="small"
+                  onChange={(e) => handleSetSample(0, e.target.value)}
+                />
+              </div>
+              <div className="d-flex gap-4 align-items-center">
+                <h5>2.</h5>
+                <TextField
+                  className="w-100"
+                  type="text"
+                  value={item.Explain.SampleAnswer[1]}
+                  size="small"
+                  onChange={(e) => handleSetSample(1, e.target.value)}
+                />
+              </div>
+              <div className="d-flex gap-4 align-items-center">
+                <h5>3.</h5>
+                <TextField
+                  className="w-100"
+                  type="text"
+                  value={item.Explain.SampleAnswer[2]}
+                  size="small"
+                  onChange={(e) => handleSetSample(2, e.target.value)}
+                />
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <div>Tip:</div>
+            <div className="d-flex flex-column gap-4">
+              <div className="d-flex gap-4 align-items-center">
+                <h5>1.</h5>
+                <TextField
+                  className="w-100"
+                  type="text"
+                  value={item.Explain.Tips[0]}
+                  size="small"
+                  onChange={(e) => handleSetTips(0, e.target.value)}
+                />
+              </div>
+              <div className="d-flex gap-4 align-items-center">
+                <h5>2.</h5>
+                <TextField
+                  className="w-100"
+                  type="text"
+                  value={item.Explain.Tips[1]}
+                  size="small"
+                  onChange={(e) => handleSetTips(1, e.target.value)}
+                />
+              </div>
+              <div className="d-flex gap-4 align-items-center">
+                <h5>3.</h5>
+                <TextField
+                  className="w-100"
+                  type="text"
+                  value={item.Explain.Tips[2]}
+                  size="small"
+                  onChange={(e) => handleSetTips(2, e.target.value)}
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      ) : (
+        flag !== "view" && (
           <div className="d-flex flex-column gap-4">
             <div className="muiInput">
               <label className="muiLabel">Available Information</label>
               <input
                 type="file"
                 accept="image/*"
-                className="disabled"
                 onChange={handleImageChange}
               />
             </div>
@@ -156,7 +324,7 @@ function SpeakPart4({ item, complete, flag, index }) {
               label="or input the link"
               type="url"
               onChange={(e) => setImageFile(e.target.value)}
-              value={item.AvailableInfo}
+              value={imageFile}
             />
 
             <div>
@@ -167,7 +335,7 @@ function SpeakPart4({ item, complete, flag, index }) {
                   <TextField
                     className="w-100"
                     type="text"
-                    value={item?.Question[0]}
+                    value={question[0]}
                     size="small"
                     onChange={(e) => handleSetQuestion(0, e.target.value)}
                   />
@@ -177,7 +345,7 @@ function SpeakPart4({ item, complete, flag, index }) {
                   <TextField
                     className="w-100"
                     type="text"
-                    value={item?.Question[1]}
+                    value={question[1]}
                     size="small"
                     onChange={(e) => handleSetQuestion(1, e.target.value)}
                   />
@@ -187,7 +355,7 @@ function SpeakPart4({ item, complete, flag, index }) {
                   <TextField
                     className="w-100"
                     type="text"
-                    value={item?.Question[2]}
+                    value={question[2]}
                     size="small"
                     onChange={(e) => handleSetQuestion(2, e.target.value)}
                   />
@@ -197,7 +365,7 @@ function SpeakPart4({ item, complete, flag, index }) {
 
             <TextField
               label="Context Translation"
-              value={item.Explain.Translation[0]}
+              value={translation[0]}
               onChange={(e) => handleSetTrans(0, e.target.value)}
               rows="4"
               multiline
@@ -210,7 +378,7 @@ function SpeakPart4({ item, complete, flag, index }) {
                   <TextField
                     className="w-100"
                     type="text"
-                    value={item.Explain.Translation[1]}
+                    value={translation[1]}
                     size="small"
                     onChange={(e) => handleSetTrans(1, e.target.value)}
                   />
@@ -220,7 +388,7 @@ function SpeakPart4({ item, complete, flag, index }) {
                   <TextField
                     className="w-100"
                     type="text"
-                    value={item.Explain.Translation[2]}
+                    value={translation[2]}
                     size="small"
                     onChange={(e) => handleSetTrans(2, e.target.value)}
                   />
@@ -230,7 +398,7 @@ function SpeakPart4({ item, complete, flag, index }) {
                   <TextField
                     className="w-100"
                     type="text"
-                    value={item.Explain.Translation[3]}
+                    value={translation[3]}
                     size="small"
                     onChange={(e) => handleSetTrans(3, e.target.value)}
                   />
@@ -246,7 +414,7 @@ function SpeakPart4({ item, complete, flag, index }) {
                   <TextField
                     className="w-100"
                     type="text"
-                    value={item.Explain.SampleAnswer[0]}
+                    value={sampleAnswer[0]}
                     size="small"
                     onChange={(e) => handleSetSample(0, e.target.value)}
                   />
@@ -256,7 +424,7 @@ function SpeakPart4({ item, complete, flag, index }) {
                   <TextField
                     className="w-100"
                     type="text"
-                    value={item.Explain.SampleAnswer[1]}
+                    value={sampleAnswer[1]}
                     size="small"
                     onChange={(e) => handleSetSample(1, e.target.value)}
                   />
@@ -266,7 +434,7 @@ function SpeakPart4({ item, complete, flag, index }) {
                   <TextField
                     className="w-100"
                     type="text"
-                    value={item.Explain.SampleAnswer[2]}
+                    value={sampleAnswer[2]}
                     size="small"
                     onChange={(e) => handleSetSample(2, e.target.value)}
                   />
@@ -282,7 +450,7 @@ function SpeakPart4({ item, complete, flag, index }) {
                   <TextField
                     className="w-100"
                     type="text"
-                    value={item.Explain.Tips[0]}
+                    value={tip[0]}
                     size="small"
                     onChange={(e) => handleSetTips(0, e.target.value)}
                   />
@@ -292,7 +460,7 @@ function SpeakPart4({ item, complete, flag, index }) {
                   <TextField
                     className="w-100"
                     type="text"
-                    value={item.Explain.Tips[1]}
+                    value={tip[1]}
                     size="small"
                     onChange={(e) => handleSetTips(1, e.target.value)}
                   />
@@ -302,7 +470,7 @@ function SpeakPart4({ item, complete, flag, index }) {
                   <TextField
                     className="w-100"
                     type="text"
-                    value={item.Explain.Tips[2]}
+                    value={tip[2]}
                     size="small"
                     onChange={(e) => handleSetTips(2, e.target.value)}
                   />
@@ -310,225 +478,43 @@ function SpeakPart4({ item, complete, flag, index }) {
               </div>
             </div>
           </div>
-        ) : (
-          flag !== "view" && (
-            <div className="d-flex flex-column gap-4">
-              <div className="muiInput">
-                <label className="muiLabel">Available Information</label>
-                <input
-                  type="file"
-                  accept="image/*"
-                  onChange={handleImageChange}
-                />
-              </div>
+        )
+      )}
+      {errors && <div className="error">{errors}</div>}
 
-              <TextField
-                label="or input the link"
-                type="url"
-                onChange={(e) => setImageFile(e.target.value)}
-                value={imageFile}
-              />
-
-              <div>
-                <div>Question:</div>
-                <div className="d-flex flex-column gap-4">
-                  <div className="d-flex gap-4 align-items-center">
-                    <h5>1.</h5>
-                    <TextField
-                      className="w-100"
-                      type="text"
-                      value={question[0]}
-                      size="small"
-                      onChange={(e) => handleSetQuestion(0, e.target.value)}
-                    />
-                  </div>
-                  <div className="d-flex gap-4 align-items-center">
-                    <h5>2.</h5>
-                    <TextField
-                      className="w-100"
-                      type="text"
-                      value={question[1]}
-                      size="small"
-                      onChange={(e) => handleSetQuestion(1, e.target.value)}
-                    />
-                  </div>
-                  <div className="d-flex gap-4 align-items-center">
-                    <h5>3.</h5>
-                    <TextField
-                      className="w-100"
-                      type="text"
-                      value={question[2]}
-                      size="small"
-                      onChange={(e) => handleSetQuestion(2, e.target.value)}
-                    />
-                  </div>
-                </div>
-              </div>
-
-              <TextField
-                label="Context Translation"
-                value={translation[0]}
-                onChange={(e) => handleSetTrans(0, e.target.value)}
-                rows="4"
-                multiline
-              />
-              <div>
-                <div>Question Translation:</div>
-                <div className="d-flex flex-column gap-4">
-                  <div className="d-flex gap-4 align-items-center">
-                    <h5>1.</h5>
-                    <TextField
-                      className="w-100"
-                      type="text"
-                      value={translation[1]}
-                      size="small"
-                      onChange={(e) => handleSetTrans(1, e.target.value)}
-                    />
-                  </div>
-                  <div className="d-flex gap-4 align-items-center">
-                    <h5>2.</h5>
-                    <TextField
-                      className="w-100"
-                      type="text"
-                      value={translation[2]}
-                      size="small"
-                      onChange={(e) => handleSetTrans(2, e.target.value)}
-                    />
-                  </div>
-                  <div className="d-flex gap-4 align-items-center">
-                    <h5>3.</h5>
-                    <TextField
-                      className="w-100"
-                      type="text"
-                      value={translation[3]}
-                      size="small"
-                      onChange={(e) => handleSetTrans(3, e.target.value)}
-                    />
-                  </div>
-                </div>
-              </div>
-
-              <div>
-                <div>Sample Answer:</div>
-                <div className="d-flex flex-column gap-4">
-                  <div className="d-flex gap-4 align-items-center">
-                    <h5>1.</h5>
-                    <TextField
-                      className="w-100"
-                      type="text"
-                      value={sampleAnswer[0]}
-                      size="small"
-                      onChange={(e) => handleSetSample(0, e.target.value)}
-                    />
-                  </div>
-                  <div className="d-flex gap-4 align-items-center">
-                    <h5>2.</h5>
-                    <TextField
-                      className="w-100"
-                      type="text"
-                      value={sampleAnswer[1]}
-                      size="small"
-                      onChange={(e) => handleSetSample(1, e.target.value)}
-                    />
-                  </div>
-                  <div className="d-flex gap-4 align-items-center">
-                    <h5>3.</h5>
-                    <TextField
-                      className="w-100"
-                      type="text"
-                      value={sampleAnswer[2]}
-                      size="small"
-                      onChange={(e) => handleSetSample(2, e.target.value)}
-                    />
-                  </div>
-                </div>
-              </div>
-
-              <div>
-                <div>Tip:</div>
-                <div className="d-flex flex-column gap-4">
-                  <div className="d-flex gap-4 align-items-center">
-                    <h5>1.</h5>
-                    <TextField
-                      className="w-100"
-                      type="text"
-                      value={tip[0]}
-                      size="small"
-                      onChange={(e) => handleSetTips(0, e.target.value)}
-                    />
-                  </div>
-                  <div className="d-flex gap-4 align-items-center">
-                    <h5>2.</h5>
-                    <TextField
-                      className="w-100"
-                      type="text"
-                      value={tip[1]}
-                      size="small"
-                      onChange={(e) => handleSetTips(1, e.target.value)}
-                    />
-                  </div>
-                  <div className="d-flex gap-4 align-items-center">
-                    <h5>3.</h5>
-                    <TextField
-                      className="w-100"
-                      type="text"
-                      value={tip[2]}
-                      size="small"
-                      onChange={(e) => handleSetTips(2, e.target.value)}
-                    />
-                  </div>
-                </div>
-              </div>
-            </div>
-          )
-        )}
-        {errors && <div className="error">{errors}</div>}
-
-        {flag === "edit" ? (
+      {flag === "edit" ? (
+        <div div className="mt-4">
+          <Button
+            className="bg-secondary text-white w-100"
+            onClick={handleSubmit}
+          >
+            Update
+          </Button>
+          <NotificationModal
+            show={showNoti}
+            onHide={() => setShowNoti(false)}
+            title="Success!"
+            message="Question updated sucessfully!"
+          />
+        </div>
+      ) : (
+        flag === "submit" && (
           <div div className="mt-4">
             <Button
-              className="bg-secondary text-white w-100"
+              className="bg-primary text-white w-100"
               onClick={handleSubmit}
             >
-              Update
+              Submit
             </Button>
             <NotificationModal
               show={showNoti}
               onHide={() => setShowNoti(false)}
               title="Success!"
-              message="Question updated sucessfully!"
+              message="Question added sucessfully!"
             />
           </div>
-        ) : (
-          flag === "submit" && (
-            <div div className="mt-4">
-              <Button
-                className="bg-primary text-white w-100"
-                onClick={handleSubmit}
-              >
-                Submit
-              </Button>
-              <NotificationModal
-                show={showNoti}
-                onHide={() => setShowNoti(false)}
-                title="Success!"
-                message="Question added sucessfully!"
-              />
-            </div>
-          )
-        )}
-      </div>
-      <div>
-        <NoteCard
-          title="Speaking Part 4: Respond to questions using information provided"
-          content={
-            "In this part of the test, you will answer three questions based on the information provided. You will have 45 seconds to read the information before the questions begin. You will have three seconds to prepare and 15 seconds to respond to Questions 1 and 2. You will have three seconds to prepare and 30 seconds to respond to Question 3."
-          }
-          note={
-            "Input must have Available Information and Questions. Others could be blank."
-          }
-        />
-      </div>
+        )
+      )}
     </div>
   );
 }

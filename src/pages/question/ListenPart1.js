@@ -3,7 +3,6 @@ import clsx from "clsx";
 import axios from "axios";
 import { Button, IconButton, TextField } from "@mui/material";
 import NotificationModal from "../../components/NotificationModal";
-import NoteCard from "../../components/NoteCard";
 import upload from "../../api/upload";
 import api from "../../api/Api";
 import "../../styles/DetailListen.css";
@@ -74,20 +73,20 @@ function ListenPart1({ flag, complete, item }) {
     let imgError = "";
     let audioError = "";
     let inputError = "";
-    if (audioFile == "" && audioFile1 == null) {
+    if (audioFile === "" && audioFile1 === null) {
       errorFields.push("Audio File");
     }
-    if (imageFile == "" && imageFile1 == null) {
+    if (imageFile === "" && imageFile1 === null) {
       errorFields.push("Image File");
     }
-    if (selectedAnswer == null || selectedAnswer == -1) {
+    if (selectedAnswer === null || selectedAnswer === -1) {
       errorFields.push("Answer");
     }
-    const isImgValid = imageFile1 != null || isImageUrl(imageFile);
-    const isAudioValid = audioFile1 != null || isAudioUrl(audioFile);
-    if (imageFile != "" && !isImgValid)
+    const isImgValid = imageFile1 !== null || isImageUrl(imageFile);
+    const isAudioValid = audioFile1 !== null || isAudioUrl(audioFile);
+    if (imageFile !== "" && !isImgValid)
       imgError = "\nThe image url link is not valid!";
-    if (audioFile != "" && !isAudioValid)
+    if (audioFile !== "" && !isAudioValid)
       audioError = "\nThe audio url link is not valid!";
     if (errorFields.length > 0)
       inputError =
@@ -102,7 +101,7 @@ function ListenPart1({ flag, complete, item }) {
     if (!validateData()) return;
     let answerL = [];
     for (let i = 0; i < 4; i++) {
-      if (i == selectedAnswer) {
+      if (i === selectedAnswer) {
         answerL.push(true);
       } else answerL.push(false);
     }
@@ -189,37 +188,136 @@ function ListenPart1({ flag, complete, item }) {
   };
 
   return (
-    <div className="d-flex p-4">
-      <div style={{ width: "70%" }}>
-        <h2>
-          {flag === "submit"
-            ? "Add Question Listening Part 1"
-            : `Question ${item.Order}`}
-        </h2>
+    <div className="d-flex p-4 flex-column">
+      <h2>
+        {flag === "submit"
+          ? "Add Question Listening Part 1"
+          : `Question ${item.Order}`}
+      </h2>
 
-        {flag === "view" ? (
+      {flag === "view" ? (
+        <div className="d-flex flex-column gap-4">
+          <div className="muiInput">
+            <label className="muiLabel">Audio</label>
+            <input type="file" accept="audio/*" className="disabled" />
+          </div>
+          <TextField
+            label="or input the link"
+            type="url"
+            value={audioFile}
+            InputProps={{ readOnly: true }}
+          />
+
+          <div className="muiInput">
+            <label className="muiLabel">Image</label>
+            <input type="file" accept="image/*" className="disabled" />
+          </div>
+
+          <TextField
+            label="or input the link"
+            type="url"
+            value={imageFile}
+            InputProps={{ readOnly: true }}
+          />
+
+          <div className="d-flex align-items-center gap-4">
+            <div className="">Answer:</div>
+
+            <IconButton
+              className={clsx(
+                "border border-black fs-6 rounded-circle",
+                selectedAnswer === 0 ? "bg-primary" : "bg-white"
+              )}
+              style={{ height: 28, width: 28 }}
+            >
+              A
+            </IconButton>
+            <IconButton
+              className={clsx(
+                "border border-black fs-6 py-1 rounded-circle",
+                selectedAnswer === 1 ? "bg-primary" : "bg-white"
+              )}
+              style={{ height: 28, width: 28 }}
+            >
+              B
+            </IconButton>
+            <IconButton
+              className={clsx(
+                "border border-black fs-6 py-1 rounded-circle",
+                selectedAnswer === 2 ? "bg-primary" : "bg-white"
+              )}
+              style={{ height: 28, width: 28 }}
+            >
+              C
+            </IconButton>
+            <IconButton
+              className={clsx(
+                "border border-black fs-6 py-1 rounded-circle",
+                selectedAnswer === 3 ? "bg-primary text-white" : "bg-white"
+              )}
+              style={{ height: 28, width: 28 }}
+            >
+              D
+            </IconButton>
+          </div>
+
+          <TextField
+            multiline
+            label="Script"
+            value={script}
+            rows="4"
+            InputProps={{ readOnly: true }}
+          />
+
+          <TextField
+            multiline
+            label="Tip"
+            value={tip}
+            rows="4"
+            InputProps={{ readOnly: true }}
+          />
+
+          <TextField
+            multiline
+            label="Translation"
+            value={translation}
+            rows="4"
+            InputProps={{ readOnly: true }}
+          />
+        </div>
+      ) : (
+        flag !== "view" && (
           <div className="d-flex flex-column gap-4">
             <div className="muiInput">
               <label className="muiLabel">Audio</label>
-              <input type="file" accept="audio/*" className="disabled" />
+              <input
+                type="file"
+                accept="audio/*"
+                onChange={handleAudioChange}
+              />
             </div>
+
             <TextField
               label="or input the link"
               type="url"
               value={audioFile}
-              InputProps={{ readOnly: true }}
+              onChange={(e) => setAudioFile(e.target.value)}
             />
 
             <div className="muiInput">
               <label className="muiLabel">Image</label>
-              <input type="file" accept="image/*" className="disabled" />
+              <input
+                type="file"
+                accept="image/*"
+                onChange={handleImageChange}
+              />
             </div>
 
             <TextField
               label="or input the link"
               type="url"
               value={imageFile}
-              InputProps={{ readOnly: true }}
+              onChange={(e) => setImageFile(e.target.value)}
             />
 
             <div className="d-flex align-items-center gap-4">
@@ -231,6 +329,7 @@ function ListenPart1({ flag, complete, item }) {
                   selectedAnswer === 0 ? "bg-primary" : "bg-white"
                 )}
                 style={{ height: 28, width: 28 }}
+                onClick={() => handleAnswerChange(0)}
               >
                 A
               </IconButton>
@@ -240,6 +339,7 @@ function ListenPart1({ flag, complete, item }) {
                   selectedAnswer === 1 ? "bg-primary" : "bg-white"
                 )}
                 style={{ height: 28, width: 28 }}
+                onClick={() => handleAnswerChange(1)}
               >
                 B
               </IconButton>
@@ -249,6 +349,7 @@ function ListenPart1({ flag, complete, item }) {
                   selectedAnswer === 2 ? "bg-primary" : "bg-white"
                 )}
                 style={{ height: 28, width: 28 }}
+                onClick={() => handleAnswerChange(2)}
               >
                 C
               </IconButton>
@@ -258,6 +359,7 @@ function ListenPart1({ flag, complete, item }) {
                   selectedAnswer === 3 ? "bg-primary text-white" : "bg-white"
                 )}
                 style={{ height: 28, width: 28 }}
+                onClick={() => handleAnswerChange(3)}
               >
                 D
               </IconButton>
@@ -267,191 +369,75 @@ function ListenPart1({ flag, complete, item }) {
               multiline
               label="Script"
               value={script}
+              onChange={(e) => setScript(e.target.value)}
               rows="4"
-              InputProps={{ readOnly: true }}
             />
 
             <TextField
               multiline
               label="Tip"
               value={tip}
+              onChange={(e) => setTip(e.target.value)}
               rows="4"
-              InputProps={{ readOnly: true }}
             />
 
             <TextField
               multiline
               label="Translation"
               value={translation}
+              onChange={(e) => setTranslation(e.target.value)}
               rows="4"
-              InputProps={{ readOnly: true }}
             />
           </div>
-        ) : (
-          flag !== "view" && (
-            <div className="d-flex flex-column gap-4">
-              <div className="muiInput">
-                <label className="muiLabel">Audio</label>
-                <input
-                  type="file"
-                  accept="audio/*"
-                  onChange={handleAudioChange}
-                />
-              </div>
+        )
+      )}
 
-              <TextField
-                label="or input the link"
-                type="url"
-                value={audioFile}
-                onChange={(e) => setAudioFile(e.target.value)}
-              />
+      {errors && <div className="error">{errors}</div>}
 
-              <div className="muiInput">
-                <label className="muiLabel">Image</label>
-                <input
-                  type="file"
-                  accept="image/*"
-                  onChange={handleImageChange}
-                />
-              </div>
-
-              <TextField
-                label="or input the link"
-                type="url"
-                value={imageFile}
-                onChange={(e) => setImageFile(e.target.value)}
-              />
-
-              <div className="d-flex align-items-center gap-4">
-                <div className="">Answer:</div>
-
-                <IconButton
-                  className={clsx(
-                    "border border-black fs-6 rounded-circle",
-                    selectedAnswer === 0 ? "bg-primary" : "bg-white"
-                  )}
-                  style={{ height: 28, width: 28 }}
-                  onClick={() => handleAnswerChange(0)}
-                >
-                  A
-                </IconButton>
-                <IconButton
-                  className={clsx(
-                    "border border-black fs-6 py-1 rounded-circle",
-                    selectedAnswer === 1 ? "bg-primary" : "bg-white"
-                  )}
-                  style={{ height: 28, width: 28 }}
-                  onClick={() => handleAnswerChange(1)}
-                >
-                  B
-                </IconButton>
-                <IconButton
-                  className={clsx(
-                    "border border-black fs-6 py-1 rounded-circle",
-                    selectedAnswer === 2 ? "bg-primary" : "bg-white"
-                  )}
-                  style={{ height: 28, width: 28 }}
-                  onClick={() => handleAnswerChange(2)}
-                >
-                  C
-                </IconButton>
-                <IconButton
-                  className={clsx(
-                    "border border-black fs-6 py-1 rounded-circle",
-                    selectedAnswer === 3 ? "bg-primary text-white" : "bg-white"
-                  )}
-                  style={{ height: 28, width: 28 }}
-                  onClick={() => handleAnswerChange(3)}
-                >
-                  D
-                </IconButton>
-              </div>
-
-              <TextField
-                multiline
-                label="Script"
-                value={script}
-                onChange={(e) => setScript(e.target.value)}
-                rows="4"
-              />
-
-              <TextField
-                multiline
-                label="Tip"
-                value={tip}
-                onChange={(e) => setTip(e.target.value)}
-                rows="4"
-              />
-
-              <TextField
-                multiline
-                label="Translation"
-                value={translation}
-                onChange={(e) => setTranslation(e.target.value)}
-                rows="4"
-              />
-            </div>
-          )
-        )}
-
-        {errors && <div className="error">{errors}</div>}
-
-        {flag === "Test" && (
-          <button
-            type="button"
-            className="btn btn-light"
-            style={{ backgroundColor: "#F88C19", color: "#fff" }}
+      {flag === "Test" && (
+        <button
+          type="button"
+          className="btn btn-light"
+          style={{ backgroundColor: "#F88C19", color: "#fff" }}
+          onClick={handleSubmit}
+        >
+          Add
+        </button>
+      )}
+      {flag === "edit" ? (
+        <div div className="mt-4">
+          <Button
+            className="bg-secondary text-white w-100"
             onClick={handleSubmit}
           >
-            Add
-          </button>
-        )}
-        {flag === "edit" ? (
+            Update
+          </Button>
+
+          <NotificationModal
+            show={showNoti}
+            onHide={() => setShowNoti(false)}
+            title="Success!"
+            message="Question updated sucessfully!"
+          />
+        </div>
+      ) : (
+        flag === "submit" && (
           <div div className="mt-4">
             <Button
-              className="bg-secondary text-white w-100"
+              className="bg-primary text-white w-100"
               onClick={handleSubmit}
             >
-              Update
+              Submit
             </Button>
-
             <NotificationModal
               show={showNoti}
               onHide={() => setShowNoti(false)}
               title="Success!"
-              message="Question updated sucessfully!"
+              message="Question added sucessfully!"
             />
           </div>
-        ) : (
-          flag === "submit" && (
-            <div div className="mt-4">
-              <Button
-                className="bg-primary text-white w-100"
-                onClick={handleSubmit}
-              >
-                Submit
-              </Button>
-              <NotificationModal
-                show={showNoti}
-                onHide={() => setShowNoti(false)}
-                title="Success!"
-                message="Question added sucessfully!"
-              />
-            </div>
-          )
-        )}
-      </div>
-      <div>
-        <NoteCard
-          title={"Listening Part 1: Photographs"}
-          content={
-            "In this part, you will look at photographs. For each photograph you will hear four statements. You will have to choose which statement has the best description of the picture."
-          }
-          note={
-            "Input must have Audio, Image and Answer. Others could be blank."
-          }
-        />
-      </div>
+        )
+      )}
     </div>
   );
 }

@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { Button, TextField } from "@mui/material";
 import api from "../../api/Api";
 import NotificationModal from "../../components/NotificationModal";
-import NoteCard from "../../components/NoteCard";
 import "../../styles/DetailListen.css";
 
 function SpeakPart5({ item, complete, flag, index }) {
@@ -71,19 +70,53 @@ function SpeakPart5({ item, complete, flag, index }) {
   };
 
   return (
-    <div className="container d-flex p-4">
-      <div style={{ width: "70%" }}>
-        <h2>
-          {flag === "submit"
-            ? "Add Question Speaking Part 5"
-            : `Question ${item.Order}`}
-        </h2>
+    <div className="d-flex p-4 flex-column">
+      <h2>
+        {flag === "submit"
+          ? "Add Question Speaking Part 5"
+          : `Question ${item.Order}`}
+      </h2>
 
-        {flag === "view" ? (
+      {flag === "view" ? (
+        <div className="d-flex flex-column gap-4">
+          <TextField
+            label="Question"
+            value={item.Question}
+            onChange={(e) => setQuestion(e.target.value)}
+            rows="3"
+            multiline
+          />
+
+          <TextField
+            label="Sample Answer"
+            value={item.Explain.SampleAnswer}
+            onChange={(e) => setSampleAnswer(e.target.value)}
+            rows="8"
+            multiline
+          />
+
+          <TextField
+            label="Tips"
+            value={item.Explain.Tips}
+            onChange={(e) => setTip(e.target.value)}
+            rows="4"
+            multiline
+          />
+
+          <TextField
+            label="Translation"
+            value={item.Explain.Translation}
+            onChange={(e) => setTranslation(e.target.value)}
+            rows="4"
+            multiline
+          />
+        </div>
+      ) : (
+        flag !== "view" && (
           <div className="d-flex flex-column gap-4">
             <TextField
               label="Question"
-              value={item.Question}
+              value={question}
               onChange={(e) => setQuestion(e.target.value)}
               rows="3"
               multiline
@@ -91,7 +124,7 @@ function SpeakPart5({ item, complete, flag, index }) {
 
             <TextField
               label="Sample Answer"
-              value={item.Explain.SampleAnswer}
+              value={sampleAnswer}
               onChange={(e) => setSampleAnswer(e.target.value)}
               rows="8"
               multiline
@@ -99,7 +132,7 @@ function SpeakPart5({ item, complete, flag, index }) {
 
             <TextField
               label="Tips"
-              value={item.Explain.Tips}
+              value={tip}
               onChange={(e) => setTip(e.target.value)}
               rows="4"
               multiline
@@ -107,95 +140,50 @@ function SpeakPart5({ item, complete, flag, index }) {
 
             <TextField
               label="Translation"
-              value={item.Explain.Translation}
+              value={translation}
               onChange={(e) => setTranslation(e.target.value)}
               rows="4"
               multiline
             />
           </div>
-        ) : (
-          flag !== "view" && (
-            <div className="d-flex flex-column gap-4">
-              <TextField
-                label="Question"
-                value={question}
-                onChange={(e) => setQuestion(e.target.value)}
-                rows="3"
-                multiline
-              />
+        )
+      )}
 
-              <TextField
-                label="Sample Answer"
-                value={sampleAnswer}
-                onChange={(e) => setSampleAnswer(e.target.value)}
-                rows="8"
-                multiline
-              />
+      {errors && <div className="error">{errors}</div>}
 
-              <TextField
-                label="Tips"
-                value={tip}
-                onChange={(e) => setTip(e.target.value)}
-                rows="4"
-                multiline
-              />
-
-              <TextField
-                label="Translation"
-                value={translation}
-                onChange={(e) => setTranslation(e.target.value)}
-                rows="4"
-                multiline
-              />
-            </div>
-          )
-        )}
-
-        {errors && <div className="error">{errors}</div>}
-
-        {flag === "edit" ? (
+      {flag === "edit" ? (
+        <div div className="mt-4">
+          <Button
+            className="bg-secondary text-white w-100"
+            onClick={handleSubmit}
+          >
+            Update
+          </Button>
+          <NotificationModal
+            show={showNoti}
+            onHide={() => setShowNoti(false)}
+            title="Success!"
+            message="Question updated sucessfully!"
+          />
+        </div>
+      ) : (
+        flag === "submit" && (
           <div div className="mt-4">
             <Button
-              className="bg-secondary text-white w-100"
+              className="bg-primary text-white w-100"
               onClick={handleSubmit}
             >
-              Update
+              Submit
             </Button>
             <NotificationModal
               show={showNoti}
               onHide={() => setShowNoti(false)}
               title="Success!"
-              message="Question updated sucessfully!"
+              message="Question added sucessfully!"
             />
           </div>
-        ) : (
-          flag === "submit" && (
-            <div div className="mt-4">
-              <Button
-                className="bg-primary text-white w-100"
-                onClick={handleSubmit}
-              >
-                Submit
-              </Button>
-              <NotificationModal
-                show={showNoti}
-                onHide={() => setShowNoti(false)}
-                title="Success!"
-                message="Question added sucessfully!"
-              />
-            </div>
-          )
-        )}
-      </div>
-      <div>
-        <NoteCard
-          title="Speaking Part 5: Express an opinion"
-          content={
-            "In this part of the test, you will give your opinion about a specific topic. Be sure to say as much as you can in the time allowed. You will have 45 seconds to prepare. Then you will have 60 seconds to speak."
-          }
-          note={"Input must have Questions. Others could be blank."}
-        />
-      </div>
+        )
+      )}
     </div>
   );
 }

@@ -3,7 +3,6 @@ import clsx from "clsx";
 import axios from "axios";
 import { Button, IconButton, TextField } from "@mui/material";
 import NotificationModal from "../../components/NotificationModal";
-import NoteCard from "../../components/NoteCard";
 import upload from "../../api/upload";
 import api from "../../api/Api";
 import "../../styles/DetailListen.css";
@@ -87,6 +86,7 @@ function ListenPart2({ flag, index, complete, item }) {
       return false;
     } else return true;
   };
+  console.log(item);
 
   const handleSubmit = async () => {
     if (!validateData()) return;
@@ -154,7 +154,7 @@ function ListenPart2({ flag, index, complete, item }) {
       setErrors("");
       setShowNoti(true);
       complete(data);
-    } else if (flag === "Test") {
+    } else if (flag === "test") {
       let data = {
         Audio: audio,
         Answer: answerL,
@@ -170,32 +170,124 @@ function ListenPart2({ flag, index, complete, item }) {
     }
   };
 
-  console.log(flag);
-
   return (
-    <div className="d-flex p-4">
-      <div style={{ width: "70%" }}>
-        <h2>
-          {flag === "submit"
-            ? "Add Question Listening Part 2"
-            : `Question ${item.Order}`}
-        </h2>
-        {flag !== "view" ? (
+    <div className="d-flex p-4 flex-column">
+      <h2>
+        {flag === "submit"
+          ? "Add Question Listening Part 2"
+          : `Question ${item.Order}`}
+      </h2>
+      {flag !== "view" ? (
+        <div className="d-flex flex-column gap-4">
+          <div className="muiInput">
+            <label className="muiLabel">Audio</label>
+            <input type="file" accept="audio/*" onChange={handleAudioChange} />
+          </div>
+
+          <TextField
+            label="or input the link"
+            type="url"
+            value={audioFile}
+            onChange={(e) => setAudioFile(e.target.value)}
+          />
+
+          <div>Answer:</div>
+          <div className="d-flex flex-column gap-4">
+            <div className="d-flex gap-4 align-items-center">
+              <IconButton
+                className={clsx(
+                  "border border-black fs-6 rounded-circle",
+                  selectedAnswer === 0 ? "bg-primary" : "bg-white"
+                )}
+                style={{ height: 28, width: 28 }}
+                onClick={() => handleAnswerChange(0)}
+              >
+                A
+              </IconButton>
+              <TextField
+                className="w-100"
+                type="text"
+                value={textR1}
+                size="small"
+                onChange={(e) => setTextR1(e.target.value)}
+              />
+            </div>
+            <div className="d-flex gap-4 align-items-center">
+              <IconButton
+                className={clsx(
+                  "border border-black fs-6 py-1 rounded-circle",
+                  selectedAnswer === 1 ? "bg-primary" : "bg-white"
+                )}
+                style={{ height: 28, width: 28 }}
+                onClick={() => handleAnswerChange(1)}
+              >
+                B
+              </IconButton>
+              <TextField
+                className="w-100"
+                type="text"
+                value={textR2}
+                size="small"
+                onChange={(e) => setTextR2(e.target.value)}
+              />
+            </div>
+            <div className="d-flex gap-4 align-items-center">
+              <IconButton
+                className={clsx(
+                  "border border-black fs-6 py-1 rounded-circle",
+                  selectedAnswer === 2 ? "bg-primary" : "bg-white"
+                )}
+                style={{ height: 28, width: 28 }}
+                onClick={() => handleAnswerChange(2)}
+              >
+                C
+              </IconButton>
+              <TextField
+                className="w-100"
+                type="text"
+                value={textR3}
+                size="small"
+                onChange={(e) => setTextR3(e.target.value)}
+              />
+            </div>
+          </div>
+
+          <TextField
+            multiline
+            label="Script"
+            value={script}
+            onChange={(e) => setScript(e.target.value)}
+            rows="4"
+          />
+
+          <TextField
+            multiline
+            label="Tip"
+            value={tip}
+            onChange={(e) => setTip(e.target.value)}
+            rows="4"
+          />
+
+          <TextField
+            multiline
+            label="Translation"
+            value={translation}
+            onChange={(e) => setTranslation(e.target.value)}
+            rows="4"
+          />
+        </div>
+      ) : (
+        flag === "view" && (
           <div className="d-flex flex-column gap-4">
             <div className="muiInput">
               <label className="muiLabel">Audio</label>
-              <input
-                type="file"
-                accept="audio/*"
-                onChange={handleAudioChange}
-              />
+              <input type="file" accept="audio/*" className="disabled" />
             </div>
 
             <TextField
               label="or input the link"
               type="url"
-              value={audioFile}
-              onChange={(e) => setAudioFile(e.target.value)}
+              value={item.Audio}
             />
 
             <div>Answer:</div>
@@ -207,16 +299,15 @@ function ListenPart2({ flag, index, complete, item }) {
                     selectedAnswer === 0 ? "bg-primary" : "bg-white"
                   )}
                   style={{ height: 28, width: 28 }}
-                  onClick={() => handleAnswerChange(0)}
                 >
                   A
                 </IconButton>
                 <TextField
                   className="w-100"
                   type="text"
-                  value={textR1}
+                  value={item.Answer[0].script}
                   size="small"
-                  onChange={(e) => setTextR1(e.target.value)}
+                  InputProps={{ readOnly: true }}
                 />
               </div>
               <div className="d-flex gap-4 align-items-center">
@@ -226,16 +317,14 @@ function ListenPart2({ flag, index, complete, item }) {
                     selectedAnswer === 1 ? "bg-primary" : "bg-white"
                   )}
                   style={{ height: 28, width: 28 }}
-                  onClick={() => handleAnswerChange(1)}
                 >
                   B
                 </IconButton>
                 <TextField
                   className="w-100"
                   type="text"
-                  value={textR2}
+                  value={item.Answer[1].script}
                   size="small"
-                  onChange={(e) => setTextR2(e.target.value)}
                 />
               </div>
               <div className="d-flex gap-4 align-items-center">
@@ -245,16 +334,14 @@ function ListenPart2({ flag, index, complete, item }) {
                     selectedAnswer === 2 ? "bg-primary" : "bg-white"
                   )}
                   style={{ height: 28, width: 28 }}
-                  onClick={() => handleAnswerChange(2)}
                 >
                   C
                 </IconButton>
                 <TextField
                   className="w-100"
                   type="text"
-                  value={textR3}
                   size="small"
-                  onChange={(e) => setTextR3(e.target.value)}
+                  value={item.Answer[2].script}
                 />
               </div>
             </div>
@@ -262,177 +349,69 @@ function ListenPart2({ flag, index, complete, item }) {
             <TextField
               multiline
               label="Script"
-              value={script}
-              onChange={(e) => setScript(e.target.value)}
+              value={item.Explain.script}
               rows="4"
             />
 
             <TextField
               multiline
               label="Tip"
-              value={tip}
-              onChange={(e) => setTip(e.target.value)}
+              value={item.Explain.tip}
               rows="4"
             />
 
             <TextField
               multiline
               label="Translation"
-              value={translation}
-              onChange={(e) => setTranslation(e.target.value)}
+              value={item.Explain.translate}
               rows="4"
             />
           </div>
-        ) : (
-          flag === "view" && (
-            <div className="d-flex flex-column gap-4">
-              <div className="muiInput">
-                <label className="muiLabel">Audio</label>
-                <input type="file" accept="audio/*" className="disabled" />
-              </div>
+        )
+      )}
 
-              <TextField
-                label="or input the link"
-                type="url"
-                value={item.Audio}
-              />
+      {errors && <div className="error">{errors}</div>}
 
-              <div>Answer:</div>
-              <div className="d-flex flex-column gap-4">
-                <div className="d-flex gap-4 align-items-center">
-                  <IconButton
-                    className={clsx(
-                      "border border-black fs-6 rounded-circle",
-                      selectedAnswer === 0 ? "bg-primary" : "bg-white"
-                    )}
-                    style={{ height: 28, width: 28 }}
-                  >
-                    A
-                  </IconButton>
-                  <TextField
-                    className="w-100"
-                    type="text"
-                    value={item.Answer[0].script}
-                    size="small"
-                    InputProps={{ readOnly: true }}
-                  />
-                </div>
-                <div className="d-flex gap-4 align-items-center">
-                  <IconButton
-                    className={clsx(
-                      "border border-black fs-6 py-1 rounded-circle",
-                      selectedAnswer === 1 ? "bg-primary" : "bg-white"
-                    )}
-                    style={{ height: 28, width: 28 }}
-                  >
-                    B
-                  </IconButton>
-                  <TextField
-                    className="w-100"
-                    type="text"
-                    value={item.Answer[1].script}
-                    size="small"
-                  />
-                </div>
-                <div className="d-flex gap-4 align-items-center">
-                  <IconButton
-                    className={clsx(
-                      "border border-black fs-6 py-1 rounded-circle",
-                      selectedAnswer === 2 ? "bg-primary" : "bg-white"
-                    )}
-                    style={{ height: 28, width: 28 }}
-                  >
-                    C
-                  </IconButton>
-                  <TextField
-                    className="w-100"
-                    type="text"
-                    size="small"
-                    value={item.Answer[2].script}
-                  />
-                </div>
-              </div>
-
-              <TextField
-                multiline
-                label="Script"
-                value={item.Explain.script}
-                rows="4"
-              />
-
-              <TextField
-                multiline
-                label="Tip"
-                value={item.Explain.tip}
-                rows="4"
-              />
-
-              <TextField
-                multiline
-                label="Translation"
-                value={item.Explain.translate}
-                rows="4"
-              />
-            </div>
-          )
-        )}
-
-        {errors && <div className="error">{errors}</div>}
-
-        {flag === "Test" && (
-          <button
-            type="button"
-            className="btn btn-light"
-            style={{ backgroundColor: "#F88C19", color: "#fff" }}
+      {flag === "test" ? (
+        <Button
+          className="bg-secondary text-white w-100 mt-4"
+          onClick={handleSubmit}
+        >
+          Add
+        </Button>
+      ) : flag === "edit" ? (
+        <div div className="mt-4">
+          <Button
+            className="bg-secondary text-white w-100"
             onClick={handleSubmit}
           >
-            Add
-          </button>
-        )}
-
-        {flag === "edit" ? (
+            Update
+          </Button>
+          <NotificationModal
+            show={showNoti}
+            onHide={() => setShowNoti(false)}
+            title="Success!"
+            message="Question updated sucessfully!"
+          />
+        </div>
+      ) : (
+        flag === "submit" && (
           <div div className="mt-4">
             <Button
-              className="bg-secondary text-white w-100"
+              className="bg-primary text-white w-100"
               onClick={handleSubmit}
             >
-              Update
+              Submit
             </Button>
             <NotificationModal
               show={showNoti}
               onHide={() => setShowNoti(false)}
               title="Success!"
-              message="Question updated sucessfully!"
+              message="Question added sucessfully!"
             />
           </div>
-        ) : (
-          flag === "submit" && (
-            <div div className="mt-4">
-              <Button
-                className="bg-primary text-white w-100"
-                onClick={handleSubmit}
-              >
-                Submit
-              </Button>
-              <NotificationModal
-                show={showNoti}
-                onHide={() => setShowNoti(false)}
-                title="Success!"
-                message="Question added sucessfully!"
-              />
-            </div>
-          )
-        )}
-      </div>
-      <div>
-        <NoteCard
-          title={`Listening Part 2: Question & Response`}
-          content={
-            "In this part, you will be tested on your ability to respond to a question. It is very important that you can understand and identify wh-questions. You will listen to three possible responses. Only one of the responses is correct."
-          }
-          note={"Input must have Audio and Answer. Others could be blank."}
-        />
-      </div>
+        )
+      )}
     </div>
   );
 }

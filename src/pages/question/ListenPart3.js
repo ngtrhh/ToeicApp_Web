@@ -5,7 +5,6 @@ import api from "../../api/Api";
 import upload from "../../api/upload";
 import QuestionForm from "../../components/question/QuestionForm";
 import NotificationModal from "../../components/NotificationModal";
-import NoteCard from "../../components/NoteCard";
 import "../../styles/DetailListen.css";
 
 function ListenPart3({ flag, complete, item }) {
@@ -190,206 +189,183 @@ function ListenPart3({ flag, complete, item }) {
   };
 
   return (
-    <div className="d-flex p-4">
-      <div style={{ width: "70%" }}>
-        <h2>
-          {flag === "submit"
-            ? "Add Question Listening Part 3"
-            : `Question ${item.Order}`}
-        </h2>
-        {flag === "view" ? (
+    <div className="d-flex p-4 flex-column">
+      <h2>
+        {flag === "submit"
+          ? "Add Question Listening Part 3"
+          : `Question ${item.Order}`}
+      </h2>
+      {flag === "view" ? (
+        <div className="d-flex flex-column gap-4">
+          <div className="muiInput">
+            <label className="muiLabel">Audio</label>
+            <input type="file" accept="audio/*" className="disabled" />
+          </div>
+
+          <TextField label="or input the link" type="url" value={item.Audio} />
+
+          <div>
+            <div>Question:</div>
+            {item.Question.map((each, key) => {
+              return <QuestionForm index={key} item={each} flag={flag} />;
+            })}
+          </div>
+
+          <TextField
+            multiline
+            label="Script"
+            value={item.Explain.script}
+            rows="4"
+          />
+
+          <TextField multiline label="Tip" value={item.Explain.tip} rows="4" />
+
+          <TextField
+            multiline
+            label="Translation"
+            value={item.Explain.translate}
+            rows="4"
+          />
+        </div>
+      ) : (
+        flag !== "view" && (
           <div className="d-flex flex-column gap-4">
             <div className="muiInput">
               <label className="muiLabel">Audio</label>
-              <input type="file" accept="audio/*" className="disabled" />
+              <input
+                type="file"
+                accept="audio/*"
+                onChange={handleAudioChange}
+              />
             </div>
 
             <TextField
               label="or input the link"
               type="url"
-              value={item.Audio}
+              onChange={(e) => setAudioFile(e.target.value)}
+              value={audioFile}
             />
 
             <div>
-              <div>Question:</div>
-              {item.Question.map((each, key) => {
-                return <QuestionForm index={key} item={each} flag={flag} />;
+              <div className="d-flex justify-content-between">
+                <div>Question:</div>
+                <Button
+                  className="bg-primary text-white"
+                  onClick={() => {
+                    let list = number.slice();
+                    list.push({
+                      Q: "",
+                      A: [
+                        { script: "", status: false },
+                        { script: "", status: false },
+                        { script: "", status: false },
+                        { script: "", status: false },
+                      ],
+                    });
+                    setNumber(list);
+                  }}
+                >
+                  Add question
+                </Button>
+              </div>
+              {number.map((each, key) => {
+                return (
+                  <QuestionForm
+                    index={key}
+                    item={each}
+                    handleAnswerChange={(i) => handleAnswerChange(key, i)}
+                    questionText={(t) => {
+                      let list = number.slice();
+                      list[key].Q = t;
+                      setNumber(list);
+                    }}
+                    answerText={(i, t) => {
+                      let list = number.slice();
+                      list[key].A[i].script = t;
+                      setNumber(list);
+                    }}
+                    deleteSelf={(j) => {
+                      let list = number.slice();
+                      list.splice(j, 1);
+                      setNumber(list);
+                    }}
+                  />
+                );
               })}
             </div>
 
             <TextField
               multiline
               label="Script"
-              value={item.Explain.script}
+              value={script}
+              onChange={(e) => setScript(e.target.value)}
               rows="4"
             />
 
             <TextField
               multiline
               label="Tip"
-              value={item.Explain.tip}
+              value={tip}
+              onChange={(e) => setTip(e.target.value)}
               rows="4"
             />
 
             <TextField
               multiline
               label="Translation"
-              value={item.Explain.translate}
+              value={translation}
+              onChange={(e) => setTranslation(e.target.value)}
               rows="4"
             />
           </div>
-        ) : (
-          flag !== "view" && (
-            <div className="d-flex flex-column gap-4">
-              <div className="muiInput">
-                <label className="muiLabel">Audio</label>
-                <input
-                  type="file"
-                  accept="audio/*"
-                  onChange={handleAudioChange}
-                />
-              </div>
+        )
+      )}
+      {errors && <div className="error">{errors}</div>}
 
-              <TextField
-                label="or input the link"
-                type="url"
-                onChange={(e) => setAudioFile(e.target.value)}
-                value={audioFile}
-              />
+      {flag === "Test" && (
+        <button
+          type="button"
+          className="btn btn-light"
+          style={{ backgroundColor: "#F88C19", color: "#fff" }}
+          onClick={handleSubmit}
+        >
+          Add
+        </button>
+      )}
 
-              <div>
-                <div className="d-flex justify-content-between">
-                  <div>Question:</div>
-                  <Button
-                    className="bg-primary text-white"
-                    onClick={() => {
-                      let list = number.slice();
-                      list.push({
-                        Q: "",
-                        A: [
-                          { script: "", status: false },
-                          { script: "", status: false },
-                          { script: "", status: false },
-                          { script: "", status: false },
-                        ],
-                      });
-                      setNumber(list);
-                    }}
-                  >
-                    Add question
-                  </Button>
-                </div>
-                {number.map((each, key) => {
-                  return (
-                    <QuestionForm
-                      index={key}
-                      item={each}
-                      handleAnswerChange={(i) => handleAnswerChange(key, i)}
-                      questionText={(t) => {
-                        let list = number.slice();
-                        list[key].Q = t;
-                        setNumber(list);
-                      }}
-                      answerText={(i, t) => {
-                        let list = number.slice();
-                        list[key].A[i].script = t;
-                        setNumber(list);
-                      }}
-                      deleteSelf={(j) => {
-                        let list = number.slice();
-                        list.splice(j, 1);
-                        setNumber(list);
-                      }}
-                    />
-                  );
-                })}
-              </div>
-
-              <TextField
-                multiline
-                label="Script"
-                value={script}
-                onChange={(e) => setScript(e.target.value)}
-                rows="4"
-              />
-
-              <TextField
-                multiline
-                label="Tip"
-                value={tip}
-                onChange={(e) => setTip(e.target.value)}
-                rows="4"
-              />
-
-              <TextField
-                multiline
-                label="Translation"
-                value={translation}
-                onChange={(e) => setTranslation(e.target.value)}
-                rows="4"
-              />
-            </div>
-          )
-        )}
-        {errors && <div className="error">{errors}</div>}
-
-        {flag === "Test" && (
-          <button
-            type="button"
-            className="btn btn-light"
-            style={{ backgroundColor: "#F88C19", color: "#fff" }}
+      {flag === "edit" ? (
+        <div div className="mt-4">
+          <Button
+            className="bg-secondary text-white w-100"
             onClick={handleSubmit}
           >
-            Add
-          </button>
-        )}
-
-        {flag === "edit" ? (
+            Update
+          </Button>
+          <NotificationModal
+            show={showNoti}
+            onHide={() => setShowNoti(false)}
+            title="Success!"
+            message="Question updated sucessfully!"
+          />
+        </div>
+      ) : (
+        flag === "submit" && (
           <div div className="mt-4">
             <Button
-              className="bg-secondary text-white w-100"
+              className="bg-primary text-white w-100"
               onClick={handleSubmit}
             >
-              Update
+              Submit
             </Button>
             <NotificationModal
               show={showNoti}
               onHide={() => setShowNoti(false)}
               title="Success!"
-              message="Question updated sucessfully!"
+              message="Question added sucessfully!"
             />
           </div>
-        ) : (
-          flag === "submit" && (
-            <div div className="mt-4">
-              <Button
-                className="bg-primary text-white w-100"
-                onClick={handleSubmit}
-              >
-                Submit
-              </Button>
-              <NotificationModal
-                show={showNoti}
-                onHide={() => setShowNoti(false)}
-                title="Success!"
-                message="Question added sucessfully!"
-              />
-            </div>
-          )
-        )}
-      </div>
-
-      <div>
-        <NoteCard
-          title={"Listenign Part 3: Short Conversations"}
-          content={
-            "In this part, you will listen to a short conversation. After the conversation, you will answer three questions about the dialogue. There will be four possible answers for each question. Typical questions include, who, what, where, when, why, and how. You may also be asked to make an inference."
-          }
-          note={
-            "Input must have Audio, Questions and Answers for each. Others could be blank."
-          }
-        />
-      </div>
+        )
+      )}
     </div>
   );
 }

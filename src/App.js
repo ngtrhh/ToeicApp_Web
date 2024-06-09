@@ -1,19 +1,23 @@
 import React from "react";
+import { Box } from "@mui/material";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Navbar from "./components/Navbar";
+import Sidebar from "./components/Sidebar";
 import Home from "./pages/Home";
 import ListeningQuestion from "./pages/ListeningQuestion";
 import ReadingQuestion from "./pages/ReadingQuestion";
 import SpeakingQuestion from "./pages/SpeakingQuestion";
+import WritingQuestion from "./pages/WritingQuestion";
 import DetailQuestion from "./pages/question/DetailQuestion";
 import Vocab from "./pages/Vocab";
 import VocabPage from "./pages/VocabPage";
-import Test from "./pages/Test";
+import Test from "./pages/test/Test";
+import TestView from "./pages/test/DetailTest";
+import CreateTest from "./pages/test/CreateTest";
 import Forum from "./pages/Forum";
 import User from "./pages/User";
-import Sidebar from "./components/Sidebar";
-import { Box } from "@mui/material";
-import WritingQuestion from "./pages/WritingQuestion";
+import ReadPdf from "./pages/ReadPdf";
+import Teacher from "./pages/teacher/Teacher";
 
 const SIDEBAR_WIDTH = 240;
 
@@ -74,15 +78,13 @@ function App() {
               <Route path="/vocabulary" exact Component={Vocab} />
               <Route path="/vocabulary/:id" exact Component={VocabPage} />
               <Route path="/test" exact Component={Test} />
+              <Route path="/test/:id" exact Component={TestView} />
+              <Route path="/test/:id/edit" exact Component={TestView} />
+              <Route path="/test/add" exact Component={CreateTest} />
               <Route path="/forum" exact Component={Forum} />
               <Route path="/user" exact Component={User} />
-              {/* <Route path="/ReadPdf" exact element={<ReadPdf />} /> */}
-              {/*
-          
-          
-          <Route path="/QuestionPage" exact element={< />} />
-          <Route path="/Test/:id" exact element={<TestView />} />
-          <Route path="/Test/add" exact element={<CreateTest />} /> */}
+              <Route path="/ReadPdf" exact Component={ReadPdf} />
+              <Route path="/teacher" exact Component={Teacher} />
             </Routes>
           </Box>
         </div>

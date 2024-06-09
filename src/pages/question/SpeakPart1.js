@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { Button, TextField } from "@mui/material";
 import api from "../../api/Api";
 import NotificationModal from "../../components/NotificationModal";
-import NoteCard from "../../components/NoteCard";
 import "../../styles/DetailListen.css";
 
 function SpeakPart1({ flag, item, complete, index }) {
@@ -66,127 +65,111 @@ function SpeakPart1({ flag, item, complete, index }) {
   };
 
   return (
-    <div className="container d-flex p-4">
-      <div style={{ width: "70%" }}>
-        <h2>
-          {flag === "submit"
-            ? "Add Question Speaking Part 1"
-            : `Question ${item.Order}`}
-        </h2>
+    <div className="d-flex p-4 flex-column">
+      <h2>
+        {flag === "submit"
+          ? "Add Question Speaking Part 1"
+          : `Question ${item.Order}`}
+      </h2>
 
-        {flag === "view" && (
-          <div className="d-flex flex-column gap-4">
-            <TextField
-              label="Question"
-              value={item.Question}
-              onChange={(e) => setQuestion(e.target.value)}
-              rows="4"
-              multiline
-            />
+      {flag === "view" && (
+        <div className="d-flex flex-column gap-4">
+          <TextField
+            label="Question"
+            value={item.Question}
+            onChange={(e) => setQuestion(e.target.value)}
+            rows="4"
+            multiline
+          />
 
-            <TextField
-              label=" Sample Answer"
-              value={item.Explain.SampleAnswer}
-              onChange={(e) => setSampleAnswer(e.target.value)}
-              rows="4"
-              multiline
-            />
+          <TextField
+            label=" Sample Answer"
+            value={item.Explain.SampleAnswer}
+            onChange={(e) => setSampleAnswer(e.target.value)}
+            rows="4"
+            multiline
+          />
 
-            <TextField
-              multiline
-              label="Tip"
-              value={item.Explain.Tips}
-              rows="4"
-            />
+          <TextField multiline label="Tip" value={item.Explain.Tips} rows="4" />
 
-            <TextField
-              multiline
-              label="Translation"
-              value={item.Explain.Translation}
-              rows="4"
-            />
-          </div>
-        )}
-        {flag !== "view" && (
-          <div className="d-flex flex-column gap-4">
-            <TextField
-              label="Question"
-              value={question}
-              onChange={(e) => setQuestion(e.target.value)}
-              rows="4"
-              multiline
-            />
+          <TextField
+            multiline
+            label="Translation"
+            value={item.Explain.Translation}
+            rows="4"
+          />
+        </div>
+      )}
+      {flag !== "view" && (
+        <div className="d-flex flex-column gap-4">
+          <TextField
+            label="Question"
+            value={question}
+            onChange={(e) => setQuestion(e.target.value)}
+            rows="4"
+            multiline
+          />
 
-            <TextField
-              label=" Sample Answer"
-              value={sampleAnswer}
-              onChange={(e) => setSampleAnswer(e.target.value)}
-              rows="4"
-              multiline
-            />
+          <TextField
+            label=" Sample Answer"
+            value={sampleAnswer}
+            onChange={(e) => setSampleAnswer(e.target.value)}
+            rows="4"
+            multiline
+          />
 
-            <TextField
-              multiline
-              label="Tip"
-              value={tip}
-              onChange={(e) => setTip(e.target.value)}
-              rows="4"
-            />
+          <TextField
+            multiline
+            label="Tip"
+            value={tip}
+            onChange={(e) => setTip(e.target.value)}
+            rows="4"
+          />
 
-            <TextField
-              multiline
-              label="Translation"
-              value={translation}
-              onChange={(e) => setTranslation(e.target.value)}
-              rows="4"
-            />
-          </div>
-        )}
-        {errors && <div className="error">{errors}</div>}
+          <TextField
+            multiline
+            label="Translation"
+            value={translation}
+            onChange={(e) => setTranslation(e.target.value)}
+            rows="4"
+          />
+        </div>
+      )}
+      {errors && <div className="error">{errors}</div>}
 
-        {flag === "edit" ? (
+      {flag === "edit" ? (
+        <div div className="mt-4">
+          <Button
+            className="bg-secondary text-white w-100"
+            onClick={handleSubmit}
+          >
+            Update
+          </Button>
+          <NotificationModal
+            show={showNoti}
+            onHide={() => setShowNoti(false)}
+            title="Success!"
+            message="Question updated sucessfully!"
+          />
+        </div>
+      ) : (
+        flag === "submit" && (
           <div div className="mt-4">
             <Button
-              className="bg-secondary text-white w-100"
+              className="bg-primary text-white w-100"
               onClick={handleSubmit}
             >
-              Update
+              Submit
             </Button>
             <NotificationModal
               show={showNoti}
               onHide={() => setShowNoti(false)}
               title="Success!"
-              message="Question updated sucessfully!"
+              message="Question added sucessfully!"
             />
           </div>
-        ) : (
-          flag === "submit" && (
-            <div div className="mt-4">
-              <Button
-                className="bg-primary text-white w-100"
-                onClick={handleSubmit}
-              >
-                Submit
-              </Button>
-              <NotificationModal
-                show={showNoti}
-                onHide={() => setShowNoti(false)}
-                title="Success!"
-                message="Question added sucessfully!"
-              />
-            </div>
-          )
-        )}
-      </div>
-      <div>
-        <NoteCard
-          title={"Speaking Part 1: Read a text aloud"}
-          content={
-            "In this part of the test, you will read aloud the text on the screen. You will have 45 seconds to prepare. Then you will have 45 seconds to read the text aloud."
-          }
-          note={"Input must have Question. Others could be blank."}
-        />
-      </div>
+        )
+      )}
     </div>
   );
 }

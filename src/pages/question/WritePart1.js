@@ -4,7 +4,6 @@ import { Button, TextField } from "@mui/material";
 import api from "../../api/Api";
 import upload from "../../api/upload";
 import NotificationModal from "../../components/NotificationModal";
-import NoteCard from "../../components/NoteCard";
 import "../../styles/DetailListen.css";
 
 function WritePart1({ item, complete, flag, index }) {
@@ -107,22 +106,61 @@ function WritePart1({ item, complete, flag, index }) {
   };
 
   return (
-    <div className="container d-flex p-4">
-      <div style={{ width: "70%" }}>
-        <h2>
-          {flag === "submit"
-            ? "Add Question Writing Part 1"
-            : `Question ${item.Order}`}
-        </h2>
+    <div className="d-flex p-4 flex-column">
+      <h2>
+        {flag === "submit"
+          ? "Add Question Writing Part 1"
+          : `Question ${item.Order}`}
+      </h2>
 
-        {flag === "view" ? (
+      {flag === "view" ? (
+        <div className="d-flex flex-column gap-4">
+          <div className="muiInput">
+            <label className="muiLabel">Image</label>
+            <input
+              type="file"
+              accept="image/*"
+              className="disabled"
+              onChange={handleImageChange}
+            />
+          </div>
+
+          <TextField
+            label="or input the link"
+            type="url"
+            onChange={(e) => setImageFile(e.target.value)}
+            value={item.Picture}
+          />
+
+          <TextField
+            label="Suggested word"
+            value={item.SugesstedWord}
+            onChange={(e) => setWord(e.target.value)}
+          />
+
+          <TextField
+            label="Sample Answer"
+            value={item.Explain.SampleAnswer}
+            onChange={(e) => setSampleAnswer(e.target.value)}
+            multiline
+          />
+
+          <TextField
+            label="Tips"
+            value={item.Explain.Tips}
+            onChange={(e) => setTip(e.target.value)}
+            rows="3"
+            muk
+          />
+        </div>
+      ) : (
+        flag !== "view" && (
           <div className="d-flex flex-column gap-4">
             <div className="muiInput">
               <label className="muiLabel">Image</label>
               <input
                 type="file"
                 accept="image/*"
-                className="disabled"
                 onChange={handleImageChange}
               />
             </div>
@@ -131,121 +169,69 @@ function WritePart1({ item, complete, flag, index }) {
               label="or input the link"
               type="url"
               onChange={(e) => setImageFile(e.target.value)}
-              value={item.Picture}
+              value={imageFile}
             />
 
             <TextField
               label="Suggested word"
-              value={item.SugesstedWord}
+              value={word}
               onChange={(e) => setWord(e.target.value)}
             />
 
             <TextField
               label="Sample Answer"
-              value={item.Explain.SampleAnswer}
+              value={sampleAnswer}
               onChange={(e) => setSampleAnswer(e.target.value)}
               multiline
             />
 
             <TextField
               label="Tips"
-              value={item.Explain.Tips}
+              value={tip}
               onChange={(e) => setTip(e.target.value)}
               rows="3"
               muk
             />
           </div>
-        ) : (
-          flag !== "view" && (
-            <div className="d-flex flex-column gap-4">
-              <div className="muiInput">
-                <label className="muiLabel">Image</label>
-                <input
-                  type="file"
-                  accept="image/*"
-                  onChange={handleImageChange}
-                />
-              </div>
+        )
+      )}
 
-              <TextField
-                label="or input the link"
-                type="url"
-                onChange={(e) => setImageFile(e.target.value)}
-                value={imageFile}
-              />
+      {errors && <div className="error">{errors}</div>}
 
-              <TextField
-                label="Suggested word"
-                value={word}
-                onChange={(e) => setWord(e.target.value)}
-              />
+      {flag === "edit" ? (
+        <div div className="mt-4">
+          <Button
+            className="bg-secondary text-white w-100"
+            onClick={handleSubmit}
+          >
+            Update
+          </Button>
 
-              <TextField
-                label="Sample Answer"
-                value={sampleAnswer}
-                onChange={(e) => setSampleAnswer(e.target.value)}
-                multiline
-              />
-
-              <TextField
-                label="Tips"
-                value={tip}
-                onChange={(e) => setTip(e.target.value)}
-                rows="3"
-                muk
-              />
-            </div>
-          )
-        )}
-
-        {errors && <div className="error">{errors}</div>}
-
-        {flag === "edit" ? (
+          <NotificationModal
+            show={showNoti}
+            onHide={() => setShowNoti(false)}
+            title="Success!"
+            message="Question updated sucessfully!"
+          />
+        </div>
+      ) : (
+        flag === "submit" && (
           <div div className="mt-4">
             <Button
-              className="bg-secondary text-white w-100"
+              className="bg-primary text-white w-100"
               onClick={handleSubmit}
             >
-              Update
+              Submit
             </Button>
-
             <NotificationModal
               show={showNoti}
               onHide={() => setShowNoti(false)}
               title="Success!"
-              message="Question updated sucessfully!"
+              message="Question added sucessfully!"
             />
           </div>
-        ) : (
-          flag === "submit" && (
-            <div div className="mt-4">
-              <Button
-                className="bg-primary text-white w-100"
-                onClick={handleSubmit}
-              >
-                Submit
-              </Button>
-              <NotificationModal
-                show={showNoti}
-                onHide={() => setShowNoti(false)}
-                title="Success!"
-                message="Question added sucessfully!"
-              />
-            </div>
-          )
-        )}
-      </div>
-      <div>
-        <NoteCard
-          title={"Writing Part 1: Write a sentence based on a picture"}
-          content={
-            "In this part of the test, you will write ONE sentence that is based on a picture. With each picture, you will be given TWO words or phrases that you must use in your sentence.\n\nYou can change the forms of the words and you can use the words in any order.\n\nYour sentence will be scored on the appropriate use of grammar, and the relevance of the sentence to the picture.\n\nYou will have eight minutes to complete this part of the test."
-          }
-          note={
-            "Input must have Image and Suggested Word. Others could be blank."
-          }
-        />
-      </div>
+        )
+      )}
     </div>
   );
 }

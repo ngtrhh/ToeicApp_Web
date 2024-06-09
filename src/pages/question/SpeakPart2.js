@@ -4,7 +4,6 @@ import axios from "axios";
 import { Button, TextField } from "@mui/material";
 import upload from "../../api/upload";
 import NotificationModal from "../../components/NotificationModal";
-import NoteCard from "../../components/NoteCard";
 import "../../styles/DetailListen.css";
 
 function SpeakPart2({ item, complete, flag, index }) {
@@ -101,31 +100,59 @@ function SpeakPart2({ item, complete, flag, index }) {
   };
 
   return (
-    <div className="container d-flex p-4">
-      <div style={{ width: "70%" }}>
-        <h2>
-          {flag === "submit"
-            ? "Add Question Speaking Part 2"
-            : `Question ${item.Order}`}
-        </h2>
+    <div className="d-flex p-4 flex-column">
+      <h2>
+        {flag === "submit"
+          ? "Add Question Speaking Part 2"
+          : `Question ${item.Order}`}
+      </h2>
 
-        {flag === "view" ? (
+      {flag === "view" ? (
+        <div className="d-flex flex-column gap-4">
+          <div className="muiInput">
+            <label className="muiLabel">Image</label>
+            <input type="file" accept="image/*" className="disabled" />
+          </div>
+
+          <TextField
+            label="or input the link"
+            type="url"
+            onChange={(e) => setImageFile(e.target.value)}
+            value={item.Picture}
+          />
+
+          <TextField
+            label=" Sample Answer"
+            value={item.Explain.SampleAnswer}
+            onChange={(e) => setSampleAnswer(e.target.value)}
+            rows="4"
+            multiline
+          />
+
+          <TextField multiline label="Tip" value={item.Explain.Tips} rows="4" />
+        </div>
+      ) : (
+        flag !== "view" && (
           <div className="d-flex flex-column gap-4">
             <div className="muiInput">
               <label className="muiLabel">Image</label>
-              <input type="file" accept="image/*" className="disabled" />
+              <input
+                type="file"
+                accept="image/*"
+                onChange={handleImageChange}
+              />
             </div>
 
             <TextField
               label="or input the link"
               type="url"
               onChange={(e) => setImageFile(e.target.value)}
-              value={item.Picture}
+              value={imageFile}
             />
 
             <TextField
               label=" Sample Answer"
-              value={item.Explain.SampleAnswer}
+              value={sampleAnswer}
               onChange={(e) => setSampleAnswer(e.target.value)}
               rows="4"
               multiline
@@ -134,93 +161,49 @@ function SpeakPart2({ item, complete, flag, index }) {
             <TextField
               multiline
               label="Tip"
-              value={item.Explain.Tips}
+              value={tip}
+              onChange={(e) => setTip(e.target.value)}
               rows="4"
             />
           </div>
-        ) : (
-          flag !== "view" && (
-            <div className="d-flex flex-column gap-4">
-              <div className="muiInput">
-                <label className="muiLabel">Image</label>
-                <input
-                  type="file"
-                  accept="image/*"
-                  onChange={handleImageChange}
-                />
-              </div>
+        )
+      )}
 
-              <TextField
-                label="or input the link"
-                type="url"
-                onChange={(e) => setImageFile(e.target.value)}
-                value={imageFile}
-              />
+      {errors && <div className="error">{errors}</div>}
 
-              <TextField
-                label=" Sample Answer"
-                value={sampleAnswer}
-                onChange={(e) => setSampleAnswer(e.target.value)}
-                rows="4"
-                multiline
-              />
-
-              <TextField
-                multiline
-                label="Tip"
-                value={tip}
-                onChange={(e) => setTip(e.target.value)}
-                rows="4"
-              />
-            </div>
-          )
-        )}
-
-        {errors && <div className="error">{errors}</div>}
-
-        {flag === "edit" ? (
+      {flag === "edit" ? (
+        <div div className="mt-4">
+          <Button
+            className="bg-secondary text-white w-100"
+            onClick={handleSubmit}
+          >
+            Update
+          </Button>
+          <NotificationModal
+            show={showNoti}
+            onHide={() => setShowNoti(false)}
+            title="Success!"
+            message="Question updated sucessfully!"
+          />
+        </div>
+      ) : (
+        flag === "submit" && (
           <div div className="mt-4">
             <Button
-              className="bg-secondary text-white w-100"
+              className="bg-primary text-white w-100"
               onClick={handleSubmit}
             >
-              Update
+              Submit
             </Button>
             <NotificationModal
               show={showNoti}
               onHide={() => setShowNoti(false)}
               title="Success!"
-              message="Question updated sucessfully!"
+              message="Question added sucessfully!"
             />
           </div>
-        ) : (
-          flag === "submit" && (
-            <div div className="mt-4">
-              <Button
-                className="bg-primary text-white w-100"
-                onClick={handleSubmit}
-              >
-                Submit
-              </Button>
-              <NotificationModal
-                show={showNoti}
-                onHide={() => setShowNoti(false)}
-                title="Success!"
-                message="Question added sucessfully!"
-              />
-            </div>
-          )
-        )}
-      </div>
-      <div>
-        <NoteCard
-          title={"Speaking Part 2: Describe a picture"}
-          content={
-            "In this part of the test, you will describe the picture on your screen in as much detail as you can. You will have 45 seconds to prepare your response. Then you will have 30 seconds to speak about the picture."
-          }
-          note={"Input must have Image. Others could be blank."}
-        />
-      </div>
+        )
+      )}
     </div>
   );
 }

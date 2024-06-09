@@ -5,6 +5,8 @@ import VocabTopicCard from "../components/VocabTopicCard";
 import AddTopicForm from "../components/AddTopicForm";
 import api from "../api/Api";
 import "../styles/Vocab.css";
+import { Button } from "@mui/material";
+import { Add } from "@mui/icons-material";
 
 function Vocab() {
   const navigate = useNavigate();
@@ -61,21 +63,23 @@ function Vocab() {
   };
 
   return (
-    <div className="d-flex flex-column">
-      <div className="d-flex flex-row position-relative">
-        <h3 className="ms-4 my-4 text-center fw-bold w-100">
-          Vocabulary Topics
-        </h3>
-        <button
-          type="button"
-          className="btn btn-light bg-secondary text-white position-absolute top-0 end-0 me-5 mt-3 fw-semibold"
-          style={{ height: "48px" }}
+    <div className="d-flex flex-column p-4 gap-4">
+      <div className="d-flex flex-row align-items-center gap-4">
+        <div className="text-primary fw-semibold fs-5 text-uppercase">
+          vocabulary topics
+        </div>
+        <div style={{ flexGrow: 1 }} />
+
+        <Button
+          className="shadow-none bg-secondary "
+          variant="contained"
           onClick={() => setOpenModal(true)}
+          startIcon={<Add />}
         >
-          <BiPlus className="me-2" size={20} />
           Add Topic
-        </button>
+        </Button>
       </div>
+
       <div className="container row row-cols-5 m-auto gap-3">
         {topics?.map((each, key) => {
           return (

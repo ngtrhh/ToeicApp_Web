@@ -1,9 +1,8 @@
 import React, { useState } from "react";
+import { Button, TextField } from "@mui/material";
 import api from "../../api/Api";
 import QuestionForm from "../../components/question/QuestionForm";
 import NotificationModal from "../../components/NotificationModal";
-import NoteCard from "../../components/NoteCard";
-import { Button, TextField } from "@mui/material";
 import "../../styles/DetailListen.css";
 
 function ReadPart3({ flag, index, complete, item }) {
@@ -149,28 +148,102 @@ function ReadPart3({ flag, index, complete, item }) {
   };
 
   return (
-    <div className="container d-flex p-4">
-      <div style={{ width: "70%" }}>
-        <h2>
-          {flag === "submit"
-            ? "Add Question Reading Part 3"
-            : `Question ${item.Order}`}
-        </h2>
+    <div className="d-flex p-4 flex-column">
+      <h2>
+        {flag === "submit"
+          ? "Add Question Reading Part 3"
+          : `Question ${item.Order}`}
+      </h2>
 
-        {flag === "view" ? (
+      {flag === "view" ? (
+        <div className="d-flex flex-column gap-4">
+          <TextField
+            label="Paragraph"
+            value={item.Paragraph}
+            rows="7"
+            multiline
+          />
+
+          <div>
+            <div>Question:</div>
+            {item.Question.map((each, key) => {
+              return (
+                <QuestionForm key={key} index={key} item={each} flag={flag} />
+              );
+            })}
+          </div>
+
+          <TextField
+            multiline
+            label="Script"
+            value={item.Explain.script}
+            rows="4"
+          />
+
+          <TextField multiline label="Tip" value={item.Explain.tip} rows="4" />
+
+          <TextField
+            multiline
+            label="Translation"
+            value={item.Explain.translate}
+            rows="4"
+          />
+        </div>
+      ) : (
+        flag !== "view" && (
           <div className="d-flex flex-column gap-4">
             <TextField
               label="Paragraph"
-              value={item.Paragraph}
+              value={paragraph}
+              onChange={(e) => setParagraph(e.target.value)}
               rows="7"
               multiline
             />
 
             <div>
-              <div>Question:</div>
-              {item.Question.map((each, key) => {
+              <div className="d-flex justify-content-between">
+                <div>Question:</div>
+                <Button
+                  className="bg-primary text-white"
+                  onClick={() => {
+                    let list = number.slice();
+                    list.push({
+                      Q: "",
+                      A: [
+                        { script: "", status: false },
+                        { script: "", status: false },
+                        { script: "", status: false },
+                        { script: "", status: false },
+                      ],
+                    });
+                    setNumber(list);
+                  }}
+                >
+                  Add question
+                </Button>
+              </div>
+              {number.map((each, key) => {
                 return (
-                  <QuestionForm key={key} index={key} item={each} flag={flag} />
+                  <QuestionForm
+                    index={key}
+                    item={each}
+                    handleAnswerChange={(i) => handleAnswerChange(key, i)}
+                    questionText={(t) => {
+                      let list = number.slice();
+                      list[key].Q = t;
+                      setNumber(list);
+                    }}
+                    answerText={(i, t) => {
+                      let list = number.slice();
+                      list[key].A[i].script = t;
+                      setNumber(list);
+                    }}
+                    deleteSelf={(j) => {
+                      let list = number.slice();
+                      list.splice(j, 1);
+                      setNumber(list);
+                    }}
+                  />
                 );
               })}
             </div>
@@ -178,177 +251,85 @@ function ReadPart3({ flag, index, complete, item }) {
             <TextField
               multiline
               label="Script"
-              value={item.Explain.script}
+              value={script}
+              onChange={(e) => setScript(e.target.value)}
               rows="4"
             />
 
             <TextField
               multiline
               label="Tip"
-              value={item.Explain.tip}
+              value={tip}
+              onChange={(e) => setTip(e.target.value)}
               rows="4"
             />
 
             <TextField
               multiline
               label="Translation"
-              value={item.Explain.translate}
+              value={translation}
+              onChange={(e) => setTranslation(e.target.value)}
               rows="4"
             />
           </div>
-        ) : (
-          flag !== "view" && (
-            <div className="d-flex flex-column gap-4">
-              <TextField
-                label="Paragraph"
-                value={paragraph}
-                onChange={(e) => setParagraph(e.target.value)}
-                rows="7"
-                multiline
-              />
+        )
+      )}
 
-              <div>
-                <div className="d-flex justify-content-between">
-                  <div>Question:</div>
-                  <Button
-                    className="bg-primary text-white"
-                    onClick={() => {
-                      let list = number.slice();
-                      list.push({
-                        Q: "",
-                        A: [
-                          { script: "", status: false },
-                          { script: "", status: false },
-                          { script: "", status: false },
-                          { script: "", status: false },
-                        ],
-                      });
-                      setNumber(list);
-                    }}
-                  >
-                    Add question
-                  </Button>
-                </div>
-                {number.map((each, key) => {
-                  return (
-                    <QuestionForm
-                      index={key}
-                      item={each}
-                      handleAnswerChange={(i) => handleAnswerChange(key, i)}
-                      questionText={(t) => {
-                        let list = number.slice();
-                        list[key].Q = t;
-                        setNumber(list);
-                      }}
-                      answerText={(i, t) => {
-                        let list = number.slice();
-                        list[key].A[i].script = t;
-                        setNumber(list);
-                      }}
-                      deleteSelf={(j) => {
-                        let list = number.slice();
-                        list.splice(j, 1);
-                        setNumber(list);
-                      }}
-                    />
-                  );
-                })}
-              </div>
+      {errors && <div className="error">{errors}</div>}
 
-              <TextField
-                multiline
-                label="Script"
-                value={script}
-                onChange={(e) => setScript(e.target.value)}
-                rows="4"
-              />
-
-              <TextField
-                multiline
-                label="Tip"
-                value={tip}
-                onChange={(e) => setTip(e.target.value)}
-                rows="4"
-              />
-
-              <TextField
-                multiline
-                label="Translation"
-                value={translation}
-                onChange={(e) => setTranslation(e.target.value)}
-                rows="4"
-              />
-            </div>
-          )
-        )}
-
-        {errors && <div className="error">{errors}</div>}
-
-        {flag === "Test" && (
-          <button
-            type="button"
-            className="btn btn-light"
-            style={{ backgroundColor: "#F88C19", color: "#fff" }}
+      {flag === "Test" && (
+        <button
+          type="button"
+          className="btn btn-light"
+          style={{ backgroundColor: "#F88C19", color: "#fff" }}
+          onClick={handleSubmit}
+        >
+          Add
+        </button>
+      )}
+      {flag === "Test" && (
+        <button
+          type="button"
+          className="btn btn-light"
+          style={{ backgroundColor: "#F88C19", color: "#fff" }}
+          onClick={handleSubmit}
+        >
+          Add
+        </button>
+      )}
+      {flag === "edit" ? (
+        <div div className="mt-4">
+          <Button
+            className="bg-secondary text-white w-100"
             onClick={handleSubmit}
           >
-            Add
-          </button>
-        )}
-        {flag === "Test" && (
-          <button
-            type="button"
-            className="btn btn-light"
-            style={{ backgroundColor: "#F88C19", color: "#fff" }}
-            onClick={handleSubmit}
-          >
-            Add
-          </button>
-        )}
-        {flag === "edit" ? (
+            Update
+          </Button>
+          <NotificationModal
+            show={showNoti}
+            onHide={() => setShowNoti(false)}
+            title="Success!"
+            message="Question updated sucessfully!"
+          />
+        </div>
+      ) : (
+        flag === "submit" && (
           <div div className="mt-4">
             <Button
-              className="bg-secondary text-white w-100"
+              className="bg-primary text-white w-100"
               onClick={handleSubmit}
             >
-              Update
+              Submit
             </Button>
             <NotificationModal
               show={showNoti}
               onHide={() => setShowNoti(false)}
               title="Success!"
-              message="Question updated sucessfully!"
+              message="Question added sucessfully!"
             />
           </div>
-        ) : (
-          flag === "submit" && (
-            <div div className="mt-4">
-              <Button
-                className="bg-primary text-white w-100"
-                onClick={handleSubmit}
-              >
-                Submit
-              </Button>
-              <NotificationModal
-                show={showNoti}
-                onHide={() => setShowNoti(false)}
-                title="Success!"
-                message="Question added sucessfully!"
-              />
-            </div>
-          )
-        )}
-      </div>
-      <div>
-        <NoteCard
-          title={"Reading Part 3: Reading Comprehension"}
-          content={
-            "In this part, you will read passages in the form of letters, ads, memos, faxes, schedules, etc. The reading section has a number of single passages and 4 double passages. You will be asked 2-4 questions about each single passage, and 5 questions for each double passage. Sometimes you will be asked for specific details. Other times you will be asked about what the passage implies. In the paired passages you will also be asked to make connections between the two related texts. On the real test you will not have time to read every word. You need to practice scanning and reading quickly for details."
-          }
-          note={
-            "Input must have Paragragh, Questions and Answers for each. Others could be blank."
-          }
-        />
-      </div>
+        )
+      )}
     </div>
   );
 }

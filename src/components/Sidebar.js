@@ -8,8 +8,6 @@ import {
   ListItemText,
 } from "@mui/material";
 import {
-  SettingsOutlined,
-  PermContactCalendarOutlined,
   VerifiedOutlined,
   Home,
   ArtTrack,
@@ -19,8 +17,11 @@ import {
   Book,
   Mic,
   Edit,
+  Article,
+  AccountBox,
+  Forum,
 } from "@mui/icons-material";
-import { Link, NavLink, useLocation } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import Logo from "../assets/penguin.png";
 import "../styles/Navbar.css";
 
@@ -125,7 +126,7 @@ const Sidebar = ({ width }) => {
         <NavLink to="/test" className="nav-link">
           <ListItemButton>
             <ListItemIcon>
-              <PermContactCalendarOutlined />
+              <Article />
             </ListItemIcon>
             <ListItemText primary="Test" />
           </ListItemButton>
@@ -134,7 +135,7 @@ const Sidebar = ({ width }) => {
         <NavLink to="/forum" className="nav-link">
           <ListItemButton>
             <ListItemIcon>
-              <SettingsOutlined />
+              <Forum />
             </ListItemIcon>
             <ListItemText primary="Forum" />
           </ListItemButton>
@@ -143,11 +144,20 @@ const Sidebar = ({ width }) => {
         <NavLink to="/user" className="nav-link">
           <ListItemButton>
             <ListItemIcon>
-              <SettingsOutlined />
+              <AccountBox />
             </ListItemIcon>
             <ListItemText primary="User" />
           </ListItemButton>
         </NavLink>
+
+        {/* <NavLink to="/teacher" className="nav-link">
+          <ListItemButton>
+            <ListItemIcon>
+              <SettingsOutlined />
+            </ListItemIcon>
+            <ListItemText primary="Teacher" />
+          </ListItemButton>
+        </NavLink> */}
       </List>
     </Drawer>
   );
