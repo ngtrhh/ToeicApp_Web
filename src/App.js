@@ -18,7 +18,10 @@ import Forum from "./pages/Forum";
 import User from "./pages/User";
 import ReadPdf from "./pages/ReadPdf";
 import Teacher from "./pages/teacher/Teacher";
-
+import TeacherPage from "./pages/TeacherPage";
+import Courses from "./pages/teacher/Courses";
+import CourseDetail from "./pages/CourseDetail";
+import Transaction from "./pages/teacher/Transaction";
 const SIDEBAR_WIDTH = 240;
 
 function App() {
@@ -77,6 +80,7 @@ function App() {
               <Route path="/question/:id" exact Component={DetailQuestion} />
               <Route path="/vocabulary" exact Component={Vocab} />
               <Route path="/vocabulary/:id" exact Component={VocabPage} />
+              <Route path="/Teacher/:id" exact Component={TeacherPage} />
               <Route path="/test" exact Component={Test} />
               <Route path="/test/:id" exact Component={TestView} />
               <Route path="/test/:id/edit" exact Component={TestView} />
@@ -85,6 +89,9 @@ function App() {
               <Route path="/user" exact Component={User} />
               <Route path="/ReadPdf" exact Component={ReadPdf} />
               <Route path="/teacher" exact Component={Teacher} />
+              <Route path="/courses" exact Component={Courses} />
+              <Route path="/course/:id" exact Component={CourseDetail} />
+              <Route path="/Transaction" exact Component={Transaction} />
             </Routes>
           </Box>
         </div>

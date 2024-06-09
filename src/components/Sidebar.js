@@ -19,6 +19,10 @@ import {
   Edit,
   Article,
   AccountBox,
+  SettingsOutlined,
+  Diversity2Outlined,
+  SchoolOutlined,
+  MonetizationOnOutlined,
   Forum,
 } from "@mui/icons-material";
 import { NavLink } from "react-router-dom";
@@ -150,14 +154,30 @@ const Sidebar = ({ width }) => {
           </ListItemButton>
         </NavLink>
 
-        {/* <NavLink to="/teacher" className="nav-link">
+        <NavLink to="/teacher" className="nav-link">
           <ListItemButton>
             <ListItemIcon>
-              <SettingsOutlined />
+              <Diversity2Outlined />
             </ListItemIcon>
             <ListItemText primary="Teacher" />
           </ListItemButton>
-        </NavLink> */}
+        </NavLink>
+        <NavLink to="/courses" className="nav-link">
+          <ListItemButton>
+            <ListItemIcon>
+              <SchoolOutlined/>
+            </ListItemIcon>
+            <ListItemText primary="Courses" />
+          </ListItemButton>
+        </NavLink>
+        <NavLink to="/Transaction" className="nav-link">
+          <ListItemButton>
+            <ListItemIcon>
+              <MonetizationOnOutlined/>
+            </ListItemIcon>
+            <ListItemText primary="Transactions" />
+          </ListItemButton>
+        </NavLink>
       </List>
     </Drawer>
   );

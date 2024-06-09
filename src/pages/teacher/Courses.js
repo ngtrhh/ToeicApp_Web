@@ -11,78 +11,33 @@ import Paper from "@mui/material/Paper";
 import Api from "../../api/Api";
 import { useNavigate } from "react-router-dom";
 
-const USER=[{
-  name:"Nguyễn Minh Anh",
-  email:"ma231@gmail.com",
-  birthdate:"1/3/2003",
-  score:"910",
-  otherCertificate:["ielts-8.0"],
-  university:"UIT",
-  id:"7rjshr988328489385"
-},
-{
-  name:"Trần Hồng Kha",
-  email:"hongkha@gmail.com",
-  birthdate:"1/2/2005",
-  score:"890",
-  otherCertificate:["ielts-7.0"],
-  university:"USSH",
-  id:"7rjshr988328489386"
-},
-{
-  name:"Trần Hoa",
-  email:"hoa@gmail.com",
-  birthdate:"2/2/2001",
-  score:"880",
-  otherCertificate:["toeic sw"],
-  university:"UIT",
-  id:"7rjshr988328489387"
-},
-{
-  name:"Trương Thị Kim",
-  email:"kim@gmail.com",
-  birthdate:"30/5/1999",
-  score:"900",
-  otherCertificate:["toeic sw"],
-  university:"UIT",
-  id:"7rjshr988328489388"
-},
-{
-  name:"Trương Mỹ Lan ",
-  email:"mylan@gmail.com",
-  birthdate:"2/2/2000",
-  score:"880",
-  otherCertificate:["toeic sw"],
-  university:"UIT",
-  id:"7rjshr988328489389"
-}
-]
 
-const Teacher = () => {
+
+const Courses = () => {
   const [sign, setSign] = useState("1");
   const [users, setUsers] = useState([]);
   const UserRow = ({ user }) => {
     const navigate = useNavigate();
   const viewTopic = (item) => {
-    navigate("/Teacher/" +  user.id, {
-      state: { userId: user.id },
+    navigate("/course/" + user.classId, {
+      state: { classId: user.classId, teacherId:user.userId},
     });
   };
   const allowfunc = async()=>{
-    await Api.updateUser(user.id,{allow:true});
+    await Api.updateClass(user.classId,{allow:true});
     getTests()
   }
     return (
       <TableRow>
-        <TableCell>{user.name ? user.name : "unk"}</TableCell>
-        <TableCell>{user.email ? user.email : "unk"}</TableCell>
-        <TableCell>{user.birthdate ? user.birthdate : "unk"}</TableCell>
-        <TableCell>{user.score ? user.score : "unk"}</TableCell>
+        <TableCell>{user.ClassName ? user.ClassName : "unk"}</TableCell>
+        <TableCell>{user.Start_Date ? user.Start_Date: "unk"}</TableCell>
+        <TableCell>{user.Finish_Date ? user.Finish_Date : "unk"}</TableCell>
+        <TableCell>{user.MaximumStudents ? user.MaximumStudents : "unk"}</TableCell>
         <TableCell>
-          {user.otherCertificate ? user.otherCertificate[0] : "no"}
+          {user.Skill ? user.Skill : "unk"}
         </TableCell>
         <TableCell>
-          {user.university ? user.university : "unk"}
+          {user.Tuition ? user.Tuition : "unk"}
         </TableCell>
         <TableCell><Button  onClick={() => {viewTopic()}}>See</Button></TableCell>
         <TableCell><Button onClick={() => {allowfunc()}}>Allow</Button></TableCell>
@@ -96,17 +51,17 @@ const Teacher = () => {
         <Table>
           <TableHead style={{ backgroundColor: "#62A912" }}>
             <TableRow>
-              <TableCell style={{ color: "#fff", fontSize: 15 }}>Name</TableCell>
-              <TableCell style={{ color: "#fff", fontSize: 15 }}>Email</TableCell>
-              <TableCell style={{ color: "#fff", fontSize: 15 }}>Age</TableCell>
+              <TableCell style={{ color: "#fff", fontSize: 15 }}>Title</TableCell>
+              <TableCell style={{ color: "#fff", fontSize: 15 }}>Start</TableCell>
+              <TableCell style={{ color: "#fff", fontSize: 15 }}>Finish</TableCell>
               <TableCell style={{ color: "#fff", fontSize: 15 }}>
-                Score
+                Maximum Student
               </TableCell>
               <TableCell style={{ color: "#fff", fontSize: 15 }}>
-                Certificates
+                About Skill
               </TableCell>
               <TableCell style={{ color: "#fff", fontSize: 15 }}>
-                University
+                Fee
               </TableCell>
               <TableCell style={{ color: "#fff", fontSize: 15 }}>
                 
@@ -125,11 +80,11 @@ const Teacher = () => {
     );
   };
   const getTests = async () => {
-    const list = await Api.getAllTeachers()
+    const list = await Api.getAllClasses()
     let filtered= list?.filter(function(item) {
-      return item?.allow===false||item?.allow===undefined
-     })
-     setUsers(filtered)
+        return item?.allow===false||item?.allow===undefined
+       })
+       setUsers(filtered)
   };
 
   useEffect(() => {
@@ -138,16 +93,16 @@ const Teacher = () => {
   
   return (
     <div className="d-flex flex-column p-4 gap-4">
-      <div className="text-primary fw-semibold fs-5 text-uppercase">Teacher Profile</div>
+      <div className="text-primary fw-semibold fs-5 text-uppercase">Courses</div>
 
       <div className="d-flex flex-row justify-content-center">
         <Button
           onClick={() => {
             setSign("1")
             let filtered= users?.filter(function(item) {
-              return item?.allow===false||item?.allow===undefined
-             })
-             setUsers(filtered)
+                return item?.allow===false
+               })
+               setUsers(filtered)
           }}
           className={clsx(
             "shadow-none rounded-0",
@@ -161,9 +116,9 @@ const Teacher = () => {
           onClick={() => {
             setSign("2")
             let filtered= users?.filter(function(item) {
-              return item?.allow===true
-             })
-             setUsers(filtered)
+                return item?.allow===true||item?.allow===undefined
+               })
+               setUsers(filtered)
           }}
           className={clsx(
             "shadow-none rounded-0",
@@ -179,4 +134,4 @@ const Teacher = () => {
   )
 }
 
-export default Teacher
+export default Courses
