@@ -1,32 +1,29 @@
 import React, { useState } from "react";
-import axios from "axios";
 import { Button, TextField } from "@mui/material";
+import { Link, useNavigate } from "react-router-dom";
 import api from "../../api/Api";
-import upload from "../../api/upload";
-import NotificationModal from "../../components/NotificationModal";
-import "../../styles/DetailListen.css";
+import NotificationModal from "../NotificationModal";
+import "../../styles/Question.css";
 
-function SpeakPart4({ item, complete, flag, index }) {
+function SpeakPart3({ item, complete, flag, index }) {
   const [translation, setTranslation] = useState(
     item?.Explain?.Translation || ["", "", "", ""]
   );
+  const [context, setContext] = useState(item?.Context || "");
   const [question, setQuestion] = useState(item?.Question || ["", "", ""]);
   const [sampleAnswer, setSampleAnswer] = useState(
     item?.Explain?.SampleAnswer || ["", "", ""]
   );
   const [tip, setTip] = useState(item?.Explain?.Tips || ["", "", ""]);
-  const [imageFile, setImageFile] = useState(item?.AvailableInfo || null);
-  const [imageFile1, setImageFile1] = useState(null);
   const [errors, setErrors] = useState("");
   const [showNoti, setShowNoti] = useState(false);
+
+  const navigate = useNavigate();
 
   const handleSetQuestion = (i, t) => {
     let list = question.slice();
     list[i] = t;
     setQuestion(list);
-  };
-  const handleImageChange = (e) => {
-    setImageFile1(e.target.files[0]);
   };
 
   const handleSetTrans = (i, t) => {
@@ -44,72 +41,41 @@ function SpeakPart4({ item, complete, flag, index }) {
     list[i] = t;
     setTip(list);
   };
-  function isImageUrl(url) {
-    try {
-      new URL(url);
-      const imageUrlRegex =
-        /^(https?|ftp):\/\/[^\s/$.?#].[^\s]*\.(png|jpg|jpeg|gif)$/i;
-      return imageUrlRegex.test(url.toLowerCase());
-    } catch (error) {
-      return false;
-    }
-  }
+
   const validateData = () => {
     let errorFields = [];
-    let imgError = "";
     let inputError = "";
-    if (imageFile === "" || (imageFile === null && imageFile1 === null)) {
-      errorFields.push("Image File");
+    if (context === "") {
+      errorFields.push("Context");
     }
     if (question[0] === "" || question[1] === "" || question[2] === "") {
       errorFields.push("Questions");
     }
-    const isImgValid = imageFile1 !== null || isImageUrl(imageFile);
-    if (imageFile !== "" && imageFile !== null && !isImgValid)
-      imgError = "\nThe image url link is not valid!";
-    if (errorFields.length > 0)
+    if (errorFields.length > 0) {
       inputError =
         "Please input complete information: " + errorFields.join(", ") + ". ";
-    if (errorFields.length > 0 || !isImgValid) {
-      setErrors(inputError + imgError);
+      setErrors(inputError);
       return false;
     } else return true;
   };
 
   const handleSubmit = async () => {
     if (!validateData()) return;
-    let image = imageFile;
-    if (imageFile1 != null) {
-      try {
-        const formData = new FormData();
-        formData.append("image", imageFile1);
-        const response = await axios.post(upload.upImage, formData, {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        });
-        image = response.data.photo;
-        console.log(image);
-      } catch (e) {}
-    }
+
     if (flag === "submit") {
       let data = {
         Question: question,
-        AvailableInfo: image,
+        Context: context,
         Explain: {
           SampleAnswer: sampleAnswer,
           Tips: tip,
           Translation: translation,
         },
-        Order: await api.countQuestion("SpeakPart4"),
+        Order: await api.countQuestion("SpeakPart3"),
       };
-      //console.log(data);
 
-      // const response = await axios.post('http://192.168.1.103:3000/api/Question/uploadAudio', formData1);
-
-      await api.addQuestion("SpeakPart4", data);
-      setImageFile(null);
-      setImageFile1(null);
+      await api.addQuestion("SpeakPart3", data);
+      setContext("");
       setQuestion(["", "", ""]);
       setTip(["", "", ""]);
       setTranslation(["", "", "", ""]);
@@ -119,44 +85,47 @@ function SpeakPart4({ item, complete, flag, index }) {
     } else if (flag === "edit") {
       let data = {
         Question: question,
-        AvailableInfo: image,
+        Context: context,
         Explain: {
           SampleAnswer: sampleAnswer,
           Tips: tip,
           Translation: translation,
         },
       };
+      setErrors("");
+      setShowNoti(true);
       complete(data);
     }
   };
 
   return (
     <div className="d-flex p-4 flex-column">
+      {flag !== "Test" && (
+        <Link
+          to={".."}
+          onClick={(e) => {
+            e.preventDefault();
+            navigate(-1);
+          }}
+        >
+          Back
+        </Link>
+      )}
       <h2>
         {flag === "submit"
-          ? "Add Question Speaking Part 4"
+          ? "Add Question Speaking Part 3"
           : `Question ${item.Order}`}
       </h2>
 
       {flag === "view" ? (
         <div className="d-flex flex-column gap-4">
-          <div className="muiInput">
-            <label className="muiLabel">Available Information</label>
-            <input
-              type="file"
-              accept="image/*"
-              className="disabled"
-              onChange={handleImageChange}
-            />
-          </div>
-
           <TextField
-            label="or input the link"
-            type="url"
-            onChange={(e) => setImageFile(e.target.value)}
-            value={item.AvailableInfo}
+            label="Context"
+            value={item.Context}
+            onChange={(e) => setContext(e.target.value)}
+            rows="4"
+            multiline
           />
-
           <div>
             <div>Question:</div>
             <div className="d-flex flex-column gap-4">
@@ -311,22 +280,13 @@ function SpeakPart4({ item, complete, flag, index }) {
       ) : (
         flag !== "view" && (
           <div className="d-flex flex-column gap-4">
-            <div className="muiInput">
-              <label className="muiLabel">Available Information</label>
-              <input
-                type="file"
-                accept="image/*"
-                onChange={handleImageChange}
-              />
-            </div>
-
             <TextField
-              label="or input the link"
-              type="url"
-              onChange={(e) => setImageFile(e.target.value)}
-              value={imageFile}
+              label="Context"
+              value={context}
+              onChange={(e) => setContext(e.target.value)}
+              rows="4"
+              multiline
             />
-
             <div>
               <div>Question:</div>
               <div className="d-flex flex-column gap-4">
@@ -519,4 +479,4 @@ function SpeakPart4({ item, complete, flag, index }) {
   );
 }
 
-export default SpeakPart4;
+export default SpeakPart3;

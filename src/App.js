@@ -4,24 +4,25 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import Sidebar from "./components/Sidebar";
 import Home from "./pages/Home";
-import ListeningQuestion from "./pages/ListeningQuestion";
-import ReadingQuestion from "./pages/ReadingQuestion";
-import SpeakingQuestion from "./pages/SpeakingQuestion";
-import WritingQuestion from "./pages/WritingQuestion";
+import ListeningQuestion from "./pages/question/ListeningQuestion";
+import ReadingQuestion from "./pages/question/ReadingQuestion";
+import SpeakingQuestion from "./pages/question/SpeakingQuestion";
+import WritingQuestion from "./pages/question/WritingQuestion";
 import DetailQuestion from "./pages/question/DetailQuestion";
-import Vocab from "./pages/Vocab";
-import VocabPage from "./pages/VocabPage";
+import Vocab from "./pages/vocab/Vocab";
+import VocabPage from "./pages/vocab/VocabPage";
 import Test from "./pages/test/Test";
 import TestView from "./pages/test/DetailTest";
 import CreateTest from "./pages/test/CreateTest";
 import Forum from "./pages/Forum";
-import User from "./pages/User";
+import User from "./pages/user/User";
+import UserDetail from "./pages/user/UserDetail";
 import ReadPdf from "./pages/ReadPdf";
 import Teacher from "./pages/teacher/Teacher";
-import TeacherPage from "./pages/TeacherPage";
-import Courses from "./pages/teacher/Courses";
-import CourseDetail from "./pages/CourseDetail";
-import Transaction from "./pages/teacher/Transaction";
+import TeacherPage from "./pages/teacher/TeacherPage";
+import Courses from "./pages/course/Courses";
+import CourseDetail from "./pages/course/CourseDetail";
+import Transaction from "./pages/Transaction";
 const SIDEBAR_WIDTH = 240;
 
 function App() {
@@ -80,18 +81,19 @@ function App() {
               <Route path="/question/:id" exact Component={DetailQuestion} />
               <Route path="/vocabulary" exact Component={Vocab} />
               <Route path="/vocabulary/:id" exact Component={VocabPage} />
-              <Route path="/Teacher/:id" exact Component={TeacherPage} />
               <Route path="/test" exact Component={Test} />
               <Route path="/test/:id" exact Component={TestView} />
               <Route path="/test/:id/edit" exact Component={TestView} />
               <Route path="/test/add" exact Component={CreateTest} />
               <Route path="/forum" exact Component={Forum} />
               <Route path="/user" exact Component={User} />
+              <Route path="/user/:id" exact Component={UserDetail} />
               <Route path="/ReadPdf" exact Component={ReadPdf} />
               <Route path="/teacher" exact Component={Teacher} />
+              <Route path="/teacher/:id" exact Component={TeacherPage} />
               <Route path="/courses" exact Component={Courses} />
-              <Route path="/course/:id" exact Component={CourseDetail} />
-              <Route path="/Transaction" exact Component={Transaction} />
+              <Route path="/courses/:id" exact Component={CourseDetail} />
+              <Route path="/transaction" exact Component={Transaction} />
             </Routes>
           </Box>
         </div>

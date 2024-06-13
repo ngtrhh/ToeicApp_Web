@@ -11,13 +11,14 @@ import { Delete, Edit } from "@mui/icons-material";
 import { Link } from "react-router-dom";
 import api from "../../api/Api";
 
-const ImageCard = ({ item, index, part }) => {
+const ImageCard = ({ item, index, part, setQuestionList, questionList }) => {
   const deleteQuestion = async (e) => {
     e.preventDefault();
     const shouldDelete = window.confirm(
       "Are you sure you want to delete this question?"
     );
     if (shouldDelete) {
+      setQuestionList(questionList.filter((record) => record.Id !== item.Id));
       await api.deleteQuestion(part, item.Id);
     }
   };

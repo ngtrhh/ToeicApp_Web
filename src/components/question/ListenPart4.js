@@ -1,11 +1,16 @@
 import React, { useState } from "react";
-import api from "../../api/Api";
-import QuestionForm from "../../components/question/QuestionForm";
-import NotificationModal from "../../components/NotificationModal";
+import axios from "axios";
 import { Button, TextField } from "@mui/material";
-import "../../styles/DetailListen.css";
+import { Link, useNavigate } from "react-router-dom";
+import api from "../../api/Api";
+import upload from "../../api/upload";
+import QuestionForm from "./QuestionForm";
+import NotificationModal from "../NotificationModal";
+import "../../styles/Question.css";
 
-function ReadPart2({ flag, index, complete, item }) {
+function ListenPart4({ flag, index, complete, item }) {
+  const [audioFile, setAudioFile] = useState(item?.Audio || null);
+  const [audioFile1, setAudioFile1] = useState(null);
   const [script, setScript] = useState(item?.Explain?.script || "");
   const [tip, setTip] = useState(item?.Explain?.tip || "");
   const [translation, setTranslation] = useState(
@@ -27,6 +32,18 @@ function ReadPart2({ flag, index, complete, item }) {
   const [errors, setErrors] = useState("");
   const [showNoti, setShowNoti] = useState(false);
 
+  const navigate = useNavigate();
+
+  const handleAudioChange = (e) => {
+    const selectedAudio = e.target.files[0];
+
+    if (selectedAudio) {
+      setAudioFile1(selectedAudio);
+    } else {
+      setAudioFile1(null);
+    }
+  };
+
   const handleAnswerChange = (key, i) => {
     let list = number.slice();
     for (let j = 0; j < 4; j++) {
@@ -39,10 +56,24 @@ function ReadPart2({ flag, index, complete, item }) {
     setNumber(list);
   };
 
+  function isAudioUrl(url) {
+    try {
+      new URL(url);
+      const audioUrlRegex = /^(https?|ftp):\/\/[^\s/$.?#].[^\s]*\.(mp3|wav)$/i;
+      return audioUrlRegex.test(url.toLowerCase());
+    } catch (error) {
+      return false;
+    }
+  }
+
   const validateData = () => {
     let errorFields = [];
+    let audioError = "";
     let inputError = "";
     let quantityError = "";
+    if (audioFile === null || (audioFile === "" && audioFile1 === null)) {
+      errorFields.push("Audio File");
+    }
 
     const hasEmptyQ = number.some((item) => item.Q === "");
     const hasEmptyScript = number.some((item) =>
@@ -54,20 +85,23 @@ function ReadPart2({ flag, index, complete, item }) {
     if (hasEmptyQ || hasEmptyScript || hasNoTrueAnswer) {
       errorFields.push("Questions and Answers");
     }
-
+    const isAudioValid = audioFile1 != null || isAudioUrl(audioFile);
+    if (audioFile !== null && audioFile !== "" && !isAudioValid)
+      audioError = "\nThe audio url link is not valid!";
     if (errorFields.length > 0)
       inputError =
         "Please input complete information: " + errorFields.join(", ") + ". ";
-    if (number.length !== 4)
-      quantityError = "The number of questions in this part must be 4!";
+    if (number.length !== 3)
+      quantityError = "The number of questions in this part must be 3!";
     if (
       errorFields.length > 0 ||
-      number.length !== 4 ||
+      number.length !== 3 ||
+      !isAudioValid ||
       hasEmptyQ ||
       hasEmptyScript ||
       hasNoTrueAnswer
     ) {
-      setErrors(inputError + quantityError);
+      setErrors(inputError + audioError + quantityError);
       return false;
     } else return true;
   };
@@ -80,8 +114,23 @@ function ReadPart2({ flag, index, complete, item }) {
         if (number[i].A[j].status) correct.push(j);
       }
     }
+    let audio = audioFile;
+    if (audioFile1 != null) {
+      try {
+        const formData = new FormData();
+        formData.append("audio", audioFile1);
+        const response = await axios.post(upload.upAudio, formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        });
+        audio = response.data.audio;
+        console.log(audio);
+      } catch (e) {}
+    }
     if (flag === "submit") {
       let data = {
+        Audio: audio,
         Question: number,
         Explain: {
           script: script,
@@ -89,9 +138,11 @@ function ReadPart2({ flag, index, complete, item }) {
           translate: translation,
         },
         Correct: correct,
-        Order: await api.countQuestion("ReadPart2"),
+        Order: await api.countQuestion("ListenPart4"),
       };
-      await api.addQuestion("ReadPart2", data);
+      await api.addQuestion("ListenPart4", data);
+      setAudioFile("");
+      setAudioFile1(null);
       setTip("");
       setTranslation("");
       setScript("");
@@ -110,6 +161,7 @@ function ReadPart2({ flag, index, complete, item }) {
       setShowNoti(true);
     } else if (flag === "Test") {
       let data = {
+        Audio: audio,
         Question: number,
         Explain: {
           script: script,
@@ -123,6 +175,7 @@ function ReadPart2({ flag, index, complete, item }) {
       complete(data);
     } else if (flag === "edit") {
       let data = {
+        Audio: audio,
         Question: number,
         Explain: {
           script: script,
@@ -136,24 +189,39 @@ function ReadPart2({ flag, index, complete, item }) {
       complete(data);
     }
   };
-  console.log(flag);
 
   return (
     <div className="d-flex p-4 flex-column">
+      {flag !== "Test" && (
+        <Link
+          to={".."}
+          onClick={(e) => {
+            e.preventDefault();
+            navigate(-1);
+          }}
+        >
+          Back
+        </Link>
+      )}
       <h2>
         {flag === "submit"
-          ? "Add Question Reading Part 2"
+          ? "Add Question Listening Part 4"
           : `Question ${item.Order}`}
       </h2>
 
       {flag === "view" ? (
         <div className="d-flex flex-column gap-4">
+          <div className="muiInput">
+            <label className="muiLabel">Audio</label>
+            <input type="file" accept="audio/*" className="disabled" />
+          </div>
+
+          <TextField label="or input the link" type="url" value={item.Audio} />
+
           <div>
             <div>Question:</div>
             {item.Question.map((each, key) => {
-              return (
-                <QuestionForm key={key} index={key} item={each} flag={flag} />
-              );
+              return <QuestionForm index={key} item={each} flag={flag} />;
             })}
           </div>
 
@@ -176,6 +244,22 @@ function ReadPart2({ flag, index, complete, item }) {
       ) : (
         flag !== "view" && (
           <div className="d-flex flex-column gap-4">
+            <div className="muiInput">
+              <label className="muiLabel">Audio</label>
+              <input
+                type="file"
+                accept="audio/*"
+                onChange={handleAudioChange}
+              />
+            </div>
+
+            <TextField
+              label="or input the link"
+              type="url"
+              onChange={(e) => setAudioFile(e.target.value)}
+              value={audioFile}
+            />
+
             <div>
               <div className="d-flex justify-content-between">
                 <div>Question:</div>
@@ -223,7 +307,6 @@ function ReadPart2({ flag, index, complete, item }) {
                 );
               })}
             </div>
-
             <TextField
               multiline
               label="Script"
@@ -251,7 +334,6 @@ function ReadPart2({ flag, index, complete, item }) {
         )
       )}
       {errors && <div className="error">{errors}</div>}
-
       {flag === "Test" && (
         <button
           type="button"
@@ -262,6 +344,7 @@ function ReadPart2({ flag, index, complete, item }) {
           Add
         </button>
       )}
+
       {flag === "edit" ? (
         <div div className="mt-4">
           <Button
@@ -299,4 +382,4 @@ function ReadPart2({ flag, index, complete, item }) {
   );
 }
 
-export default ReadPart2;
+export default ListenPart4;

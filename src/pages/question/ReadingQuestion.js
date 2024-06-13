@@ -3,8 +3,8 @@ import clsx from "clsx";
 import { Button } from "@mui/material";
 import { Add } from "@mui/icons-material";
 import { useLocation, useNavigate } from "react-router-dom";
-import api from "../api/Api";
-import OtherCard from "../components/question/OtherCard";
+import api from "../../api/Api";
+import OtherCard from "../../components/question/OtherCard";
 
 const ReadingQuestion = () => {
   const navigate = useNavigate();
@@ -104,7 +104,14 @@ const ReadingQuestion = () => {
 
       <div className="row row-cols-1 row-cols-md-4 row-cols-lg-4 g-4 mt-0">
         {questionList?.map((item, key) => (
-          <OtherCard key={key} item={item} index={key} part={part} />
+          <OtherCard
+            key={key}
+            item={item}
+            index={key}
+            part={part}
+            setQuestionList={setQuestionList}
+            questionList={questionList}
+          />
         ))}
       </div>
     </div>

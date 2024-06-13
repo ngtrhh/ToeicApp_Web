@@ -1,10 +1,14 @@
 import React, { useState } from "react";
 import { Button, TextField } from "@mui/material";
+import { Link, useNavigate } from "react-router-dom";
 import api from "../../api/Api";
-import NotificationModal from "../../components/NotificationModal";
-import "../../styles/DetailListen.css";
+import NotificationModal from "../NotificationModal";
+import "../../styles/Question.css";
 
-function WritePart3({ item, complete, flag, index }) {
+function SpeakPart5({ item, complete, flag, index }) {
+  const [translation, setTranslation] = useState(
+    item?.Explain?.Translation || ""
+  );
   const [question, setQuestion] = useState(item?.Question || "");
   const [sampleAnswer, setSampleAnswer] = useState(
     item?.Explain?.SampleAnswer || ""
@@ -12,6 +16,8 @@ function WritePart3({ item, complete, flag, index }) {
   const [tip, setTip] = useState(item?.Explain?.Tips || "");
   const [errors, setErrors] = useState("");
   const [showNoti, setShowNoti] = useState(false);
+
+  const navigate = useNavigate();
 
   const validateData = () => {
     let errorFields = [];
@@ -36,12 +42,18 @@ function WritePart3({ item, complete, flag, index }) {
         Explain: {
           SampleAnswer: sampleAnswer,
           Tips: tip,
+          Translation: translation,
         },
-        Order: await api.countQuestion("WritePart3"),
+        Order: await api.countQuestion("SpeakPart5"),
       };
-      await api.addQuestion("WritePart3", data);
+      //console.log(data);
+
+      // const response = await axios.post('http://192.168.1.103:3000/api/Question/uploadAudio', formData1);
+
+      await api.addQuestion("SpeakPart5", data);
       setQuestion("");
       setTip("");
+      setTranslation("");
       setSampleAnswer("");
       setErrors("");
       setShowNoti(true);
@@ -51,6 +63,7 @@ function WritePart3({ item, complete, flag, index }) {
         Explain: {
           SampleAnswer: sampleAnswer,
           Tips: tip,
+          Translation: translation,
         },
       };
       setErrors("");
@@ -61,13 +74,24 @@ function WritePart3({ item, complete, flag, index }) {
 
   return (
     <div className="d-flex p-4 flex-column">
+      {flag !== "Test" && (
+        <Link
+          to={".."}
+          onClick={(e) => {
+            e.preventDefault();
+            navigate(-1);
+          }}
+        >
+          Back
+        </Link>
+      )}
       <h2>
         {flag === "submit"
-          ? "Add Question Writing Part 3"
+          ? "Add Question Speaking Part 5"
           : `Question ${item.Order}`}
       </h2>
 
-      {flag === "view" && (
+      {flag === "view" ? (
         <div className="d-flex flex-column gap-4">
           <TextField
             label="Question"
@@ -81,7 +105,7 @@ function WritePart3({ item, complete, flag, index }) {
             label="Sample Answer"
             value={item.Explain.SampleAnswer}
             onChange={(e) => setSampleAnswer(e.target.value)}
-            rows="10"
+            rows="8"
             multiline
           />
 
@@ -92,34 +116,51 @@ function WritePart3({ item, complete, flag, index }) {
             rows="4"
             multiline
           />
-        </div>
-      )}
-      {flag !== "view" && (
-        <div className="d-flex flex-column gap-4">
-          <TextField
-            label="Question"
-            value={question}
-            onChange={(e) => setQuestion(e.target.value)}
-            rows="3"
-            multiline
-          />
 
           <TextField
-            label="Sample Answer"
-            value={sampleAnswer}
-            onChange={(e) => setSampleAnswer(e.target.value)}
-            rows="10"
-            multiline
-          />
-
-          <TextField
-            label="Tips"
-            value={tip}
-            onChange={(e) => setTip(e.target.value)}
+            label="Translation"
+            value={item.Explain.Translation}
+            onChange={(e) => setTranslation(e.target.value)}
             rows="4"
             multiline
           />
         </div>
+      ) : (
+        flag !== "view" && (
+          <div className="d-flex flex-column gap-4">
+            <TextField
+              label="Question"
+              value={question}
+              onChange={(e) => setQuestion(e.target.value)}
+              rows="3"
+              multiline
+            />
+
+            <TextField
+              label="Sample Answer"
+              value={sampleAnswer}
+              onChange={(e) => setSampleAnswer(e.target.value)}
+              rows="8"
+              multiline
+            />
+
+            <TextField
+              label="Tips"
+              value={tip}
+              onChange={(e) => setTip(e.target.value)}
+              rows="4"
+              multiline
+            />
+
+            <TextField
+              label="Translation"
+              value={translation}
+              onChange={(e) => setTranslation(e.target.value)}
+              rows="4"
+              multiline
+            />
+          </div>
+        )
       )}
 
       {errors && <div className="error">{errors}</div>}
@@ -161,4 +202,4 @@ function WritePart3({ item, complete, flag, index }) {
   );
 }
 
-export default WritePart3;
+export default SpeakPart5;

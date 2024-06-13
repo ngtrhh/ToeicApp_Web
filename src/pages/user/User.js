@@ -5,7 +5,7 @@ import Table from "@mui/material/Table";
 import TableHead from "@mui/material/TableHead";
 import TableBody from "@mui/material/TableBody";
 import Paper from "@mui/material/Paper";
-import api from "../api/Api";
+import api from "../../api/Api";
 
 const UserRow = ({ user }) => {
   return (

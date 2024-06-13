@@ -1,11 +1,10 @@
 import React from "react";
 import Logo from "../assets/penguin.png";
-import "../styles/Navbar.css";
 
 function Home() {
   return (
     <div className="d-flex flex-column p-4">
-      <div className="bg-body shadow d-flex flex-column p-4 gap-5">
+      <div className="bg-body shadow d-flex flex-column p-4 gap-5 m-4">
         <div className="text-primary text-center fw-semibold fs-1">
           TOEIC PRACTICE APP MANAGEMENT
         </div>

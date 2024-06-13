@@ -2,10 +2,11 @@ import React, { useState } from "react";
 import clsx from "clsx";
 import axios from "axios";
 import { Button, IconButton, TextField } from "@mui/material";
-import NotificationModal from "../../components/NotificationModal";
+import { Link, useNavigate } from "react-router-dom";
+import NotificationModal from "../NotificationModal";
 import upload from "../../api/upload";
 import api from "../../api/Api";
-import "../../styles/DetailListen.css";
+import "../../styles/Question.css";
 
 function ListenPart1({ flag, complete, item }) {
   const [audioFile, setAudioFile] = useState(item?.Audio || "");
@@ -22,6 +23,8 @@ function ListenPart1({ flag, complete, item }) {
   );
   const [errors, setErrors] = useState("");
   const [showNoti, setShowNoti] = useState(false);
+
+  const navigate = useNavigate();
 
   const handleAudioChange = (e) => {
     const selectedAudio = e.target.files[0];
@@ -189,6 +192,17 @@ function ListenPart1({ flag, complete, item }) {
 
   return (
     <div className="d-flex p-4 flex-column">
+      {flag !== "Test" && (
+        <Link
+          to={".."}
+          onClick={(e) => {
+            e.preventDefault();
+            navigate(-1);
+          }}
+        >
+          Back
+        </Link>
+      )}
       <h2>
         {flag === "submit"
           ? "Add Question Listening Part 1"

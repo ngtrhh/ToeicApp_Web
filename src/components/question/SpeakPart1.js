@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import { Button, TextField } from "@mui/material";
+import { Link, useNavigate } from "react-router-dom";
 import api from "../../api/Api";
-import NotificationModal from "../../components/NotificationModal";
-import "../../styles/DetailListen.css";
+import NotificationModal from "../NotificationModal";
+import "../../styles/Question.css";
 
 function SpeakPart1({ flag, item, complete, index }) {
   const [translation, setTranslation] = useState(
@@ -15,6 +16,8 @@ function SpeakPart1({ flag, item, complete, index }) {
   const [tip, setTip] = useState(item?.Explain?.Tips || "");
   const [errors, setErrors] = useState("");
   const [showNoti, setShowNoti] = useState(false);
+
+  const navigate = useNavigate();
 
   const validateData = () => {
     let errorFields = [];
@@ -66,6 +69,17 @@ function SpeakPart1({ flag, item, complete, index }) {
 
   return (
     <div className="d-flex p-4 flex-column">
+      {flag !== "Test" && (
+        <Link
+          to={".."}
+          onClick={(e) => {
+            e.preventDefault();
+            navigate(-1);
+          }}
+        >
+          Back
+        </Link>
+      )}
       <h2>
         {flag === "submit"
           ? "Add Question Speaking Part 1"

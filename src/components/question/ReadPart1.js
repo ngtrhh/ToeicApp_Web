@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 import clsx from "clsx";
 import { Button, IconButton, TextField } from "@mui/material";
+import { Link, useNavigate } from "react-router-dom";
 import api from "../../api/Api";
-import NotificationModal from "../../components/NotificationModal";
-import "../../styles/DetailListen.css";
+import NotificationModal from "../NotificationModal";
+import "../../styles/Question.css";
 
 function ReadPart1({ flag, complete, item }) {
   const [question, setQuestion] = useState(item?.Question || "");
@@ -34,6 +35,8 @@ function ReadPart1({ flag, complete, item }) {
   );
   const [errors, setErrors] = useState("");
   const [showNoti, setShowNoti] = useState(false);
+
+  const navigate = useNavigate();
 
   const handleAnswerChange = (e) => {
     setSelectedAnswer(e);
@@ -136,6 +139,17 @@ function ReadPart1({ flag, complete, item }) {
 
   return (
     <div className="d-flex p-4 flex-column">
+      {flag !== "Test" && (
+        <Link
+          to={".."}
+          onClick={(e) => {
+            e.preventDefault();
+            navigate(-1);
+          }}
+        >
+          Back
+        </Link>
+      )}
       <h2>
         {flag === "submit"
           ? "Add Question Reading Part 1"

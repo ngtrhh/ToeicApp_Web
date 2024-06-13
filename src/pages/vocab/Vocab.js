@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { BiPlus } from "react-icons/bi";
-import VocabTopicCard from "../components/VocabTopicCard";
-import AddTopicForm from "../components/AddTopicForm";
-import api from "../api/Api";
-import "../styles/Vocab.css";
+import VocabTopicCard from "../../components/VocabTopicCard";
+import AddTopicForm from "../../components/AddTopicForm";
+import api from "../../api/Api";
+import "../../styles/Vocab.css";
 import { Button } from "@mui/material";
 import { Add } from "@mui/icons-material";
 

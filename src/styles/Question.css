@@ -28,7 +28,7 @@
 
 textarea,
 input {
-  box-shadow: none;
+  box-shadow: none !important;
 }
 
 input[type="file"].disabled {

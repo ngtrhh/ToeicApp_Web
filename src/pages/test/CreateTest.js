@@ -1,13 +1,13 @@
 import React, { useState } from "react";
 import clsx from "clsx";
 import { Button, TextField } from "@mui/material";
-import ListenPart1 from "../question/ListenPart1";
-import ListenPart2 from "../question/ListenPart2";
-import ListenPart3 from "../question/ListenPart3";
-import ListenPart4 from "../question/ListenPart4";
-import ReadPart1 from "../question/ReadPart1";
-import ReadPart2 from "../question/ReadPart2";
-import ReadPart3 from "../question/ReadPart3";
+import ListenPart1 from "../../components/question/ListenPart1";
+import ListenPart2 from "../../components/question/ListenPart2";
+import ListenPart3 from "../../components/question/ListenPart3";
+import ListenPart4 from "../../components/question/ListenPart4";
+import ReadPart1 from "../../components/question/ReadPart1";
+import ReadPart2 from "../../components/question/ReadPart2";
+import ReadPart3 from "../../components/question/ReadPart3";
 import NoteCard from "../../components/NoteCard";
 import api from "../../api/Api";
 

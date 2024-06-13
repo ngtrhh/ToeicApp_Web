@@ -1,10 +1,11 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { Button, TextField } from "@mui/material";
+import { Link, useNavigate } from "react-router-dom";
 import api from "../../api/Api";
 import upload from "../../api/upload";
-import NotificationModal from "../../components/NotificationModal";
-import "../../styles/DetailListen.css";
+import NotificationModal from "../NotificationModal";
+import "../../styles/Question.css";
 
 function WritePart1({ item, complete, flag, index }) {
   const [imageFile, setImageFile] = useState(item?.Picture || null);
@@ -16,6 +17,8 @@ function WritePart1({ item, complete, flag, index }) {
   const [tip, setTip] = useState(item?.Explain?.Tips || "");
   const [errors, setErrors] = useState("");
   const [showNoti, setShowNoti] = useState(false);
+
+  const navigate = useNavigate();
 
   const handleImageChange = (e) => {
     setImageFile1(e.target.files[0]);
@@ -107,6 +110,17 @@ function WritePart1({ item, complete, flag, index }) {
 
   return (
     <div className="d-flex p-4 flex-column">
+      {flag !== "Test" && (
+        <Link
+          to={".."}
+          onClick={(e) => {
+            e.preventDefault();
+            navigate(-1);
+          }}
+        >
+          Back
+        </Link>
+      )}
       <h2>
         {flag === "submit"
           ? "Add Question Writing Part 1"

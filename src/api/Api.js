@@ -179,7 +179,7 @@ const updateTest = async (id, data) => {
     console.error("error: ", error.message);
   }
 };
-const getAllTest = async (part) => {
+const getAllTest = async () => {
   try {
     const response = await client.get("/Tests");
     if (response.data.success) {
@@ -192,7 +192,7 @@ const getAllTest = async (part) => {
     return [];
   }
 };
-const getUsers = async (part) => {
+const getUsers = async () => {
   try {
     const response = await client.get("/Users");
     if (response.data.success) {
@@ -207,91 +207,107 @@ const getUsers = async (part) => {
 };
 const getAllTeachers = async () => {
   try {
-    const response = await client.get('/Teachers');
+    const response = await client.get("/Teachers");
     if (response.data.success) {
       return response.data.teachers;
     } else {
-      console.log('not get classes');
+      console.log("not get classes");
     }
   } catch (error) {
-    console.log('error: ', error.message);
+    console.log("error: ", error.message);
   }
 };
 const getAllClasses = async () => {
   try {
-    const response = await client.get('/Classes');
+    const response = await client.get("/Classes");
     if (response.data.success) {
       return response.data.classes;
     } else {
-      console.log('not get classes');
+      console.log("not get classes");
     }
   } catch (error) {
-    console.log('error: ', error.message);
+    console.log("error: ", error.message);
     return [];
   }
 };
-const getUserData = async userId => {
-  const endpoint = '/UserData/' + userId;
+const getUserData = async (userId) => {
+  const endpoint = "/UserData/" + userId;
   try {
     const response = await client.get(endpoint);
     if (response.data.success) {
       return response.data.userData;
     } else {
-      console.log('not get user data');
+      console.log("not get user data");
     }
   } catch (error) {
-    console.log('error: ', error.message);
+    console.log("error: ", error.message);
     return 0;
   }
 };
 // router.get("/ClassData/:classId", getClassData);
-const getClassData = async classId => {
-  const endpoint = '/ClassData/' + classId;
+const getClassData = async (classId) => {
+  const endpoint = "/ClassData/" + classId;
   try {
     const response = await client.get(endpoint);
     if (response.data.success) {
       return response.data.classData;
     } else {
-      console.log('not get user data');
+      console.log("not get user data");
     }
   } catch (error) {
-    console.log('error: ', error.message);
+    console.log("error: ", error.message);
     return 0;
   }
 };
 // router.get("/Transactions", getAllTransaction);
 const getAllTransaction = async () => {
   try {
-    const response = await client.get('/Transactions');
+    const response = await client.get("/Transactions");
     if (response.data.success) {
       return response.data.transactions;
     } else {
-      console.log('not get transactions');
+      console.log("not get transactions");
     }
   } catch (error) {
-    console.log('error: ', error.message);
+    console.log("error: ", error.message);
     return [];
   }
 };
 const updateUser = async (id, data) => {
-  const endpoint = '/updateUser/' + id;
+  const endpoint = "/updateUser/" + id;
   console.log(endpoint);
   try {
     const response = await client.put(endpoint, data);
     console.log(response.data);
   } catch (error) {
-    console.log('error: ', error.message);
+    console.log("error: ", error.message);
   }
 };
 // router.put("/updateClass/classId", updateClass);
 const updateClass = async (id, data) => {
-  const endpoint = '/updateClass/' + id;
+  const endpoint = "/updateClass/" + id;
   console.log(endpoint);
   try {
     const response = await client.put(endpoint, data);
     console.log(response.data);
   } catch (error) {
-    console.log('error: ', error.message);
+    console.log("error: ", error.message);
+  }
+};
+// router.delete("/deleteUser/:userId", updateClass);
+const deleteUser = async (id) => {
+  try {
+    await client.delete("/deleteUser/" + id);
+  } catch (error) {
+    console.log("error: ", error.message);
+  }
+};
+// router.put("/deleteClass/classId", updateClass);
+const deleteClass = async (id) => {
+  try {
+    await client.delete("/deleteClass/" + id);
+  } catch (error) {
+    console.log("error: ", error.message);
   }
 };
 export default {
@@ -322,5 +338,7 @@ export default {
   getClassData,
   getAllTransaction,
   updateUser,
-  updateClass
+  updateClass,
+  deleteUser,
+  deleteClass,
 };

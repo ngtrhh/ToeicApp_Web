@@ -3,16 +3,16 @@ import clsx from "clsx";
 import { Button } from "@mui/material";
 import { Add } from "@mui/icons-material";
 import { useLocation, useNavigate } from "react-router-dom";
-import api from "../api/Api";
-import OtherCard from "../components/question/OtherCard";
-import ImageCard from "../components/question/ImageCard";
+import api from "../../api/Api";
+import OtherCard from "../../components/question/OtherCard";
+import ImageCard from "../../components/question/ImageCard";
 
-const WritingQuestion = () => {
+const SpeakingQuestion = () => {
   const navigate = useNavigate();
   const title = useLocation().pathname.slice(1).split("/")[1];
 
   const [questionList, setQuestionList] = useState(null);
-  const [part, setPart] = useState("WritePart1");
+  const [part, setPart] = useState("SpeakPart1");
 
   const getQuestion = async (part) => {
     setPart(part);
@@ -36,10 +36,10 @@ const WritingQuestion = () => {
         <Button
           className={clsx(
             "shadow-none",
-            part === "WritePart1" ? "bg-primary" : "text-primary bg-light"
+            part === "SpeakPart1" ? "bg-primary" : "text-primary bg-light"
           )}
-          variant={part === "WritePart1" ? "contained" : "outlined"}
-          onClick={() => setPart("WritePart1")}
+          variant={part === "SpeakPart1" ? "contained" : "outlined"}
+          onClick={() => setPart("SpeakPart1")}
           sx={{
             borderColor: "#64bb15",
             "&:hover": {
@@ -52,10 +52,10 @@ const WritingQuestion = () => {
         <Button
           className={clsx(
             "shadow-none",
-            part === "WritePart2" ? "bg-primary" : "text-primary bg-light"
+            part === "SpeakPart2" ? "bg-primary" : "text-primary bg-light"
           )}
-          variant={part === "WritePart2" ? "contained" : "outlined"}
-          onClick={() => setPart("WritePart2")}
+          variant={part === "SpeakPart2" ? "contained" : "outlined"}
+          onClick={() => setPart("SpeakPart2")}
           sx={{
             borderColor: "#64bb15",
             "&:hover": {
@@ -68,10 +68,10 @@ const WritingQuestion = () => {
         <Button
           className={clsx(
             "shadow-none",
-            part === "WritePart3" ? "bg-primary" : "text-primary bg-light"
+            part === "SpeakPart3" ? "bg-primary" : "text-primary bg-light"
           )}
-          variant={part === "WritePart3" ? "contained" : "outlined"}
-          onClick={() => setPart("WritePart3")}
+          variant={part === "SpeakPart3" ? "contained" : "outlined"}
+          onClick={() => setPart("SpeakPart3")}
           sx={{
             borderColor: "#64bb15",
             "&:hover": {
@@ -80,6 +80,40 @@ const WritingQuestion = () => {
           }}
         >
           Part 3
+        </Button>
+
+        <Button
+          className={clsx(
+            "shadow-none",
+            part === "SpeakPart4" ? "bg-primary" : "text-primary bg-light"
+          )}
+          variant={part === "SpeakPart4" ? "contained" : "outlined"}
+          onClick={() => setPart("SpeakPart4")}
+          sx={{
+            borderColor: "#64bb15",
+            "&:hover": {
+              borderColor: "#64bb15",
+            },
+          }}
+        >
+          Part 4
+        </Button>
+
+        <Button
+          className={clsx(
+            "shadow-none",
+            part === "SpeakPart5" ? "bg-primary" : "text-primary bg-light"
+          )}
+          variant={part === "SpeakPart5" ? "contained" : "outlined"}
+          onClick={() => setPart("SpeakPart5")}
+          sx={{
+            borderColor: "#64bb15",
+            "&:hover": {
+              borderColor: "#64bb15",
+            },
+          }}
+        >
+          Part 5
         </Button>
       </div>
 
@@ -104,17 +138,31 @@ const WritingQuestion = () => {
       </div>
 
       <div className="row row-cols-1 row-cols-md-4 row-cols-lg-4 g-4 mt-0">
-        {part !== "WritePart1"
+        {part !== "SpeakPart2"
           ? questionList?.map((item, key) => (
-              <OtherCard key={key} item={item} index={key} part={part} />
+              <OtherCard
+                key={key}
+                item={item}
+                index={key}
+                part={part}
+                setQuestionList={setQuestionList}
+                questionList={questionList}
+              />
             ))
-          : part === "WritePart1" &&
+          : part === "SpeakPart2" &&
             questionList?.map((item, key) => (
-              <ImageCard key={key} item={item} index={key} part={part} />
+              <ImageCard
+                key={key}
+                item={item}
+                index={key}
+                part={part}
+                setQuestionList={setQuestionList}
+                questionList={questionList}
+              />
             ))}
       </div>
     </div>
   );
 };
 
-export default WritingQuestion;
+export default SpeakingQuestion;

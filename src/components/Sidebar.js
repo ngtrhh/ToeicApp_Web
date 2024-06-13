@@ -19,11 +19,10 @@ import {
   Edit,
   Article,
   AccountBox,
-  SettingsOutlined,
-  Diversity2Outlined,
   SchoolOutlined,
   MonetizationOnOutlined,
   Forum,
+  HistoryEdu,
 } from "@mui/icons-material";
 import { NavLink } from "react-router-dom";
 import Logo from "../assets/penguin.png";
@@ -157,7 +156,7 @@ const Sidebar = ({ width }) => {
         <NavLink to="/teacher" className="nav-link">
           <ListItemButton>
             <ListItemIcon>
-              <Diversity2Outlined />
+              <SchoolOutlined />
             </ListItemIcon>
             <ListItemText primary="Teacher" />
           </ListItemButton>
@@ -165,15 +164,15 @@ const Sidebar = ({ width }) => {
         <NavLink to="/courses" className="nav-link">
           <ListItemButton>
             <ListItemIcon>
-              <SchoolOutlined/>
+              <HistoryEdu />
             </ListItemIcon>
             <ListItemText primary="Courses" />
           </ListItemButton>
         </NavLink>
-        <NavLink to="/Transaction" className="nav-link">
+        <NavLink to="/transaction" className="nav-link">
           <ListItemButton>
             <ListItemIcon>
-              <MonetizationOnOutlined/>
+              <MonetizationOnOutlined />
             </ListItemIcon>
             <ListItemText primary="Transactions" />
           </ListItemButton>

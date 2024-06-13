@@ -3,14 +3,14 @@ import clsx from "clsx";
 import { Button } from "@mui/material";
 import { Add } from "@mui/icons-material";
 import { useLocation, useNavigate } from "react-router-dom";
-import api from "../api/Api";
-import ImageCard from "../components/question/ImageCard";
-import "../styles/Questions.css";
-import "../styles/Vocab.css";
+import api from "../../api/Api";
+import ImageCard from "../../components/question/ImageCard";
+import OtherCard from "../../components/question/OtherCard";
 
 const ListeningQuestion = () => {
   const navigate = useNavigate();
   const location = useLocation();
+  console.log(location);
 
   const [questionList, setQuestionList] = useState(null);
   const [path] = useState(location.pathname.slice(10));
@@ -133,9 +133,28 @@ const ListeningQuestion = () => {
       </div>
 
       <div className="row row-cols-1 row-cols-md-4 row-cols-lg-4 g-4 mt-0">
-        {questionList?.map((item, key) => (
-          <ImageCard key={key} item={item} index={key} part={part} />
-        ))}
+        {part === "ListenPart1"
+          ? questionList?.map((item, key) => (
+              <ImageCard
+                key={key}
+                item={item}
+                index={key}
+                part={part}
+                setQuestionList={setQuestionList}
+                questionList={questionList}
+              />
+            ))
+          : part !== "ListenPart1" &&
+            questionList?.map((item, key) => (
+              <OtherCard
+                key={key}
+                item={item}
+                index={key}
+                part={part}
+                setQuestionList={setQuestionList}
+                questionList={questionList}
+              />
+            ))}
       </div>
     </div>
   );

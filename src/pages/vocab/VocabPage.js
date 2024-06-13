@@ -2,8 +2,8 @@ import React, { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash, faPen } from "@fortawesome/free-solid-svg-icons";
 import { useLocation } from "react-router-dom";
-import api from "../api/Api";
-import "../styles/Vocab.css";
+import api from "../../api/Api";
+import "../../styles/Vocab.css";
 
 function VocabPage() {
   const data = useLocation()?.state;
