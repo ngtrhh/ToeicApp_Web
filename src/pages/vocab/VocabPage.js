@@ -133,7 +133,7 @@ function VocabPage() {
         >
           Add Vocabulary
         </button>
-        <button type="button" className="btn btn-light bg-primary text-white">
+        {/* <button type="button" className="btn btn-light bg-primary text-white">
           Search
         </button>
         <input
@@ -142,7 +142,7 @@ function VocabPage() {
           onChange={(e) => setSearchVocab(e.target.value)}
           value={searchVocab}
           placeholder="Enter a vocabulary"
-        />
+        /> */}
       </div>
 
       <div>
@@ -170,7 +170,7 @@ function VocabPage() {
                   <td>{each?.ListenFile}</td>
                   <td>
                     <div className="d-flex align-items-center gap-3">
-                      <FontAwesomeIcon
+                      {/* <FontAwesomeIcon
                         icon={faPen}
                         onClick={() => {
                           setSign("edit");
@@ -184,7 +184,7 @@ function VocabPage() {
                           setOpenModal(true);
                         }}
                         color="green"
-                      />
+                      /> */}
                       <FontAwesomeIcon
                         icon={faTrash}
                         color="green"
@@ -196,9 +196,9 @@ function VocabPage() {
                             await api.updateTopic(data.TopicId, {
                               VocabQuantity: vocabList.length - 1,
                             });
-                            const list = vocabList.slice();
-                            list.splice(key, 1);
-                            setVocabList(list);
+                            setVocabList(
+                              vocabList.filter((item) => item.Id != each.Id)
+                            );
                             await api.deleteVocab(each.Id);
                           }
                         }}

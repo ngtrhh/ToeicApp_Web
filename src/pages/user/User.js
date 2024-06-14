@@ -27,18 +27,21 @@ function User() {
         }
       }
     }
-    const addKey = list.map((item, index) => ({ ...item, key: index + 1 }));
+    const addKey = list.map((item) => ({ ...item, userId: item.id }));
+    const temp = addKey.map((item, index) => ({ ...item, id: index + 1 }));
 
-    setUsers(addKey);
+    setUsers(temp);
   };
 
   useEffect(() => {
     getUsers();
   }, []);
 
+  console.log(users);
+
   const columns = [
     {
-      field: "key",
+      field: "id",
       headerName: "#",
       width: 50,
       headerClassName: "bg-primary text-white",
@@ -116,8 +119,8 @@ function User() {
         return (
           <Button
             onClick={() =>
-              navigate("/user/" + params.id, {
-                state: { userId: params.id },
+              navigate("/user/" + params.row.userId, {
+                state: { userId: params.row.userId },
               })
             }
           >

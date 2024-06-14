@@ -15,7 +15,13 @@ const Teacher = () => {
     const parseList = list.map((item) =>
       item.hasOwnProperty("allow") ? item : { ...item, allow: false }
     );
-    setUsers(parseList);
+
+    const temp1 = parseList.map((item, index) => ({
+      ...item,
+      userId: item.id,
+    }));
+    const temp2 = temp1.map((item, index) => ({ ...item, id: index + 1 }));
+    setUsers(temp2);
   };
 
   useEffect(() => {
@@ -24,7 +30,7 @@ const Teacher = () => {
 
   const columns = [
     {
-      field: "key",
+      field: "id",
       headerName: "#",
       width: 50,
       headerClassName: "bg-primary text-white",
@@ -86,7 +92,7 @@ const Teacher = () => {
               <Button
                 className="text-primary"
                 onClick={async () => {
-                  await Api.updateUser(params.id, { allow: true });
+                  await Api.updateUser(params.userId.id, { allow: true });
                   getUsers();
                 }}
               >
@@ -95,8 +101,8 @@ const Teacher = () => {
             )}
             <Button
               onClick={() =>
-                navigate("/teacher/" + params.id, {
-                  state: { userId: params.id },
+                navigate("/teacher/" + params.userId.id, {
+                  state: { userId: params.userId.id },
                 })
               }
             >
@@ -110,8 +116,10 @@ const Teacher = () => {
                 );
 
                 if (shouldDelete) {
-                  await Api.deleteUser(params.id);
-                  setUsers(users.filter((record) => record.id != params.id));
+                  await Api.deleteUser(params.userId.id);
+                  setUsers(
+                    users.filter((record) => record.id != params.userId.id)
+                  );
                 }
               }}
             >

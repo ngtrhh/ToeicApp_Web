@@ -227,7 +227,6 @@ const AddTopicForm = ({ complete, closeModal }) => {
                       value={each.Type}
                       onChange={(e) => {
                         let list = vocabs.slice();
-
                         list[key].Type = e.target.value;
                         setVocabs(list);
                       }}

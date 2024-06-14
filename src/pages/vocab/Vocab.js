@@ -21,11 +21,13 @@ function Vocab() {
 
   const addTopic = async (item) => {
     const data1 = {
-      Image: item.image,
-      Topic: item.topic,
-      VocabQuantity: item.qty,
+      Image: item.Image,
+      Topic: item.Topic,
+      VocabQuantity: item.VocabQuantity,
     };
     const res = await api.addVocabLesson(data1);
+    setTopics([...topics, { ...item, Id: res }]);
+    console.log(res);
     for (let i = 0; i < item.vocabs.length; i++) {
       let data2 = { ...item.vocabs[i], TopicId: res };
       await api.addVocab(data2);
@@ -65,7 +67,6 @@ function Vocab() {
       {openModal && (
         <AddTopicForm
           complete={(data) => {
-            setTopics([...topics, data]);
             addTopic(data);
             setOpenModal(false);
           }}
