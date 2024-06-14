@@ -21,14 +21,20 @@ function Home() {
               This system is designed to manage documents and data for the TOEIC
               Practice App. It is structured into five main sections:
             </p>
-            <ol class="list-group list-group-numbered w-50 ">
-              <li class="list-group-item">Question Management</li>
-              <li class="list-group-item">Vocabulary Management</li>
-              <li class="list-group-item">Test Management</li>
-              <li class="list-group-item">Forum Management</li>
-              <li class="list-group-item">Test Management</li>
-              <li class="list-group-item">User Management</li>
-            </ol>
+            <div className="d-flex flex-row w-100 gap-3">
+              <ol class="list-group w-50 ">
+                <li class="list-group-item">1. Question Management</li>
+                <li class="list-group-item">2. Vocabulary Management</li>
+                <li class="list-group-item">3. Test Management</li>
+                <li class="list-group-item">4. Forum Management</li>
+              </ol>
+              <ol class="list-group w-50 ">
+                <li class="list-group-item">5. User Management</li>
+                <li class="list-group-item">6. Teacher Management</li>
+                <li class="list-group-item">7. Course Management</li>
+                <li class="list-group-item">8. Transaction Management</li>
+              </ol>
+            </div>
           </div>
         </div>
       </div>
