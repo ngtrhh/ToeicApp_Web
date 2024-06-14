@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { Button, TextField } from "@mui/material";
+import { Button } from "@mui/material";
+import { Add } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 import api from "../../api/Api";
 import TestCard from "../../components/TestCard";
 import "../../styles/Test.css";
 
 function Test() {
-  const [searchTest, setSearchTest] = useState("");
   const [tests, setTests] = useState([]);
   const navigate = useNavigate();
 
@@ -21,21 +21,26 @@ function Test() {
 
   return (
     <div className="d-flex flex-column p-4 gap-4">
-      <div className="text-primary fw-semibold fs-5 text-uppercase">
-        Test list
-      </div>
+      <div className="d-flex flex-row align-items-center gap-4">
+        <div className="text-primary fw-semibold fs-5 text-uppercase">
+          Test list
+        </div>
+        <div style={{ flexGrow: 1 }} />
 
-      <div className="d-flex flex-row gap-4 px-4">
         <Button
-          className="bg-primary text-white shadow-none"
+          className="shadow-none bg-secondary "
           variant="contained"
           onClick={() => {
-            navigate(`/Test/add`);
+            navigate(`/test/add`);
           }}
+          startIcon={<Add />}
         >
           Add Test
         </Button>
+      </div>
 
+      {/* <div className="d-flex flex-row gap-4">
+        
         <Button
           className="bg-secondary text-white shadow-none"
           variant="contained"
@@ -54,7 +59,7 @@ function Test() {
           style={{ width: 300 }}
           className="bg-white"
         />
-      </div>
+      </div> */}
 
       <div className="d-flex flex-row ">
         {tests?.map((item, key) => {

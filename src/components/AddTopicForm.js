@@ -1,11 +1,19 @@
 import React, { useState } from "react";
 import "../styles/Vocab.css";
+import {
+  Button,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Select,
+  TextField,
+} from "@mui/material";
 
 const AddTopicForm = ({ complete, closeModal }) => {
   const [imageFile, setImageFile] = useState();
   const [topic, setTopic] = useState("");
   const [qty, setQty] = useState(null);
-  const [flag, setFlag] = useState("1");
+  const [flag, setFlag] = useState(1);
   const [vocabs, setVocabs] = useState([]);
   const [errors, setErrors] = useState("");
 
@@ -68,7 +76,7 @@ const AddTopicForm = ({ complete, closeModal }) => {
       });
     }
     setVocabs(list);
-    setFlag("2");
+    setFlag(2);
     setErrors("");
   };
 
@@ -131,149 +139,137 @@ const AddTopicForm = ({ complete, closeModal }) => {
         className="add-form-modal bg-white p-4 overflow-y-auto"
         style={{ scrollbarWidth: "thin" }}
       >
-        <h2 className="text-center">Add Topic</h2>
-        {flag === "1" ? (
+        <h2 className="text-center fw-semibold text-primary text-uppercase">
+          Add Topic
+        </h2>
+        {flag === 1 ? (
           <div>
-            <div className="d-flex flex-row mt-4 ms-4 align-items-center">
-              <div style={{ width: "80px" }}>Image:</div>
-              <input
-                type="url"
-                onChange={(e) => setImageFile(e.target.value)}
-                value={imageFile}
-                placeholder="Enter an image url"
-                required
-              />
-            </div>
+            <TextField
+              label="Image"
+              type="url"
+              onChange={(e) => setImageFile(e.target.value)}
+              value={imageFile}
+              placeholder="Enter an image url"
+              fullWidth
+            />
             {imageFile && (
               <img src={imageFile} alt="Topic Image" className="topicImage" />
             )}
-            <div className="d-flex flex-row mt-4 ms-4 align-items-center">
-              <div style={{ width: "80px" }}>Topic: </div>
-              <input
-                type="text"
-                onChange={(e) => setTopic(e.target.value)}
-                value={topic}
-                placeholder="Enter topic name"
-                required
-              />
+            <TextField
+              label="Topic"
+              onChange={(e) => setTopic(e.target.value)}
+              value={topic}
+              placeholder="Enter topic name"
+              fullWidth
+              className="mt-4"
+            />
+            <TextField
+              label="Quantity"
+              type="number"
+              onChange={(e) => setQty(e.target.value)}
+              value={qty}
+              placeholder="Enter number of vocabularies in this topic"
+              fullWidth
+              className="mt-4"
+            />
+            <div className="d-flex justify-content-center mt-4">
+              <Button
+                variant="contained"
+                className="bg-secondary shadow-none"
+                onClick={handleNext}
+              >
+                Next
+              </Button>
             </div>
-            <div className="d-flex flex-row mt-4 ms-4 align-items-center">
-              <div style={{ width: "80px" }}>Quantity: </div>
-              <input
-                type="number"
-                onChange={(e) => setQty(e.target.value)}
-                value={qty}
-                placeholder="Enter number of vocabularies in this topic"
-                required
-              />
-            </div>
-            <br />
-            <button
-              type="button"
-              className="btn btn-light bg-secondary text-white d-block m-auto mt-3"
-              style={{ width: 100 }}
-              onClick={handleNext}
-            >
-              Next
-            </button>
           </div>
         ) : (
-          flag === "2" && (
+          flag === 2 && (
             <div>
               {vocabs.map((each, key) => (
                 <div className="vocab-form" key={key}>
-                  <h4>{key + 1}/</h4>
-                  <div className="d-flex w-100 align-items-center mb-4 gap-2">
-                    <div style={{ flex: 1 }}>Vocabulary: </div>
-                    <input
-                      type="text"
+                  <h5 className="fw-semibold">{key + 1}.</h5>
+                  <TextField
+                    label="Vocabulary"
+                    onChange={(e) => {
+                      let list = vocabs.slice();
+                      list[key].Vocab = e.target.value;
+                      setVocabs(list);
+                    }}
+                    value={each.Vocab}
+                    fullWidth
+                  />
+                  <TextField
+                    className="mt-4"
+                    label="Audio File"
+                    type="url"
+                    onChange={(e) => {
+                      let list = vocabs.slice();
+                      list[key].ListenFile = e.target.value;
+                      setVocabs(list);
+                    }}
+                    value={each.ListenFile}
+                    fullWidth
+                  />
+                  <TextField
+                    className="mt-4"
+                    label="Phonetic Symbols"
+                    onChange={(e) => {
+                      let list = vocabs.slice();
+                      list[key].Spelling = e.target.value;
+                      setVocabs(list);
+                    }}
+                    value={each.Spelling}
+                    fullWidth
+                  />
+                  <FormControl fullWidth className="mt-4">
+                    <InputLabel>Type</InputLabel>
+                    <Select
+                      value={each.Type}
                       onChange={(e) => {
                         let list = vocabs.slice();
-                        list[key].Vocab = e.target.value;
-                        setVocabs(list);
-                      }}
-                      value={each.Vocab}
-                    />
-                  </div>
-                  <div className="d-flex w-100 align-items-center mb-4 gap-2">
-                    <div style={{ flex: 1 }}>Audio File: </div>
-                    <input
-                      type="url"
-                      onChange={(e) => {
-                        let list = vocabs.slice();
-                        list[key].ListenFile = e.target.value;
-                        setVocabs(list);
-                      }}
-                      value={each.ListenFile}
-                    />
-                  </div>
-                  <div className="d-flex w-100 align-items-center mb-4 gap-2">
-                    <div style={{ flex: 1 }}>{"Phonetic Symbols: "}</div>
-                    <input
-                      className="customInput"
-                      type="text"
-                      onChange={(e) => {
-                        let list = vocabs.slice();
-                        list[key].Spelling = e.target.value;
-                        setVocabs(list);
-                      }}
-                      value={each.Spelling}
-                    />
-                  </div>
-                  <div className="d-flex w-100 align-items-center mb-4 gap-2">
-                    <div style={{ flex: 1 }}>Type: </div>
-                    <select
-                      id="type"
-                      name="chiNhanh"
-                      onChange={(e) => {
-                        let list = vocabs.slice();
+
                         list[key].Type = e.target.value;
                         setVocabs(list);
                       }}
                     >
-                      <option value="n">n</option>
-                      <option value="v">v</option>
-                      <option value="adj">adj</option>
-                      <option value="adv">adv</option>
-                      <option value="prep">prep</option>
-                      <option value="conj">conj</option>
-                    </select>
-                  </div>
-                  <div className="d-flex w-100 align-items-center mb-4 gap-2">
-                    <div style={{ flex: 1 }}>Example: </div>
-                    <textarea
-                      rows={2}
-                      type="text"
-                      onChange={(e) => {
-                        let list = vocabs.slice();
-                        list[key].Example = e.target.value;
-                        setVocabs(list);
-                      }}
-                      value={each.Example}
-                    />
-                  </div>
-                  <div className="d-flex w-100 align-items-center mb-4 gap-2">
-                    <div style={{ flex: 1 }}>Translation: </div>
-                    <input
-                      type="text"
-                      onChange={(e) => {
-                        let list = vocabs.slice();
-                        list[key].Translate = e.target.value;
-                        setVocabs(list);
-                      }}
-                      value={each.Translate}
-                    />
-                  </div>
+                      {["n", "v", "adj", "adv", "prep", "conj"].map((item) => (
+                        <MenuItem value={item}>{item}</MenuItem>
+                      ))}
+                    </Select>
+                  </FormControl>
+                  <TextField
+                    className="mt-4"
+                    label="Example"
+                    onChange={(e) => {
+                      let list = vocabs.slice();
+                      list[key].Example = e.target.value;
+                      setVocabs(list);
+                    }}
+                    value={each.Example}
+                    fullWidth
+                  />
+                  <TextField
+                    className="mt-4"
+                    label="Translation"
+                    onChange={(e) => {
+                      let list = vocabs.slice();
+                      list[key].Translate = e.target.value;
+                      setVocabs(list);
+                    }}
+                    value={each.Translate}
+                    fullWidth
+                  />
                 </div>
               ))}
-              <button
-                type="button"
-                className="btn btn-light bg-secondary text-white d-block m-auto mt-3"
-                style={{ width: 100 }}
-                onClick={handleComplete}
-              >
-                Complete
-              </button>
+              <div className="d-flex justify-content-center mt-4">
+                <Button
+                  variant="contained"
+                  className="bg-secondary shadow-none"
+                  onClick={handleComplete}
+                >
+                  Complete
+                </Button>
+              </div>
             </div>
           )
         )}

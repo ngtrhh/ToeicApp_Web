@@ -1,14 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import VocabTopicCard from "../../components/VocabTopicCard";
+import { Button } from "@mui/material";
+import { Add } from "@mui/icons-material";
+import TopicCard from "../../components/vocab/TopicCard";
 import AddTopicForm from "../../components/AddTopicForm";
 import api from "../../api/Api";
 import "../../styles/Vocab.css";
-import { Button } from "@mui/material";
-import { Add } from "@mui/icons-material";
 
 function Vocab() {
-  const navigate = useNavigate();
   const [openModal, setOpenModal] = useState(false);
   const [topics, setTopics] = useState([]);
 
@@ -28,37 +26,10 @@ function Vocab() {
       VocabQuantity: item.qty,
     };
     const res = await api.addVocabLesson(data1);
-    let list = topics.slice();
-    list[topics.length - 1].Id = res;
-    list.push({
-      Image: "-1",
-      Topic: "-1",
-      VocabQuantity: "-1",
-    });
-
-    setTopics(list);
     for (let i = 0; i < item.vocabs.length; i++) {
       let data2 = { ...item.vocabs[i], TopicId: res };
       await api.addVocab(data2);
     }
-  };
-
-  const deleteTopic = async (item) => {
-    const shouldDelete = window.confirm(
-      "Are you sure you want to delete this topic? It will delete all the vocabularies in this topic."
-    );
-
-    if (shouldDelete) {
-      const list = topics.filter((topic) => topic.Id !== item.Id);
-      await api.deleteTopic(item.Id);
-      setTopics(list);
-    }
-  };
-
-  const viewTopic = (item) => {
-    navigate("/vocabulary/" + item.Id, {
-      state: { TopicId: item.Id, TopicName: item.Topic },
-    });
   };
 
   return (
@@ -82,11 +53,11 @@ function Vocab() {
       <div className="container row row-cols-5 m-auto gap-3">
         {topics?.map((each, key) => {
           return (
-            <VocabTopicCard
+            <TopicCard
               key={key}
               item={each}
-              deleteTopic={deleteTopic}
-              viewTopic={viewTopic}
+              topics={topics}
+              setTopics={setTopics}
             />
           );
         })}

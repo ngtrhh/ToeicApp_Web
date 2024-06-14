@@ -129,6 +129,8 @@ function SpeakPart4({ item, complete, flag, index }) {
           Translation: translation,
         },
       };
+      setErrors("");
+      setShowNoti(true);
       complete(data);
     }
   };
