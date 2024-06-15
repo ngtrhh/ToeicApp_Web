@@ -139,7 +139,7 @@ function ReadPart1({ flag, complete, item }) {
 
   return (
     <div className="d-flex p-4 flex-column">
-      {flag !== "Test" && (
+      {/* {flag !== "Test" && (
         <Link
           to={".."}
           onClick={(e) => {
@@ -149,7 +149,7 @@ function ReadPart1({ flag, complete, item }) {
         >
           Back
         </Link>
-      )}
+      )} */}
       <h2>
         {flag === "submit"
           ? "Add Question Reading Part 1"

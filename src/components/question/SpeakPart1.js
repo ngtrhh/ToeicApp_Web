@@ -69,7 +69,7 @@ function SpeakPart1({ flag, item, complete, index }) {
 
   return (
     <div className="d-flex p-4 flex-column">
-      {flag !== "Test" && (
+      {/* {flag !== "Test" && (
         <Link
           to={".."}
           onClick={(e) => {
@@ -79,7 +79,7 @@ function SpeakPart1({ flag, item, complete, index }) {
         >
           Back
         </Link>
-      )}
+      )} */}
       <h2>
         {flag === "submit"
           ? "Add Question Speaking Part 1"

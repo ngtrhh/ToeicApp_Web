@@ -92,7 +92,7 @@ const Teacher = () => {
               <Button
                 className="text-primary"
                 onClick={async () => {
-                  await Api.updateUser(params.userId.id, { allow: true });
+                  await Api.updateUser(params.row.userId, { allow: true });
                   getUsers();
                 }}
               >
@@ -101,8 +101,8 @@ const Teacher = () => {
             )}
             <Button
               onClick={() =>
-                navigate("/teacher/" + params.userId.id, {
-                  state: { userId: params.userId.id },
+                navigate("/teacher/" + params.row.userId, {
+                  state: { userId: params.row.userId },
                 })
               }
             >

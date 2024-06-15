@@ -125,8 +125,8 @@ function User() {
         return (
           <Button
             onClick={() =>
-              navigate("/user/" + params.row.userId, {
-                state: { userId: params.row.userId },
+              navigate("/user/" + params.id, {
+                state: { userId: params.id },
               })
             }
           >
