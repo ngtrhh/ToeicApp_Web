@@ -149,7 +149,7 @@ const Sidebar = ({ width }) => {
             <ListItemIcon>
               <AccountBox />
             </ListItemIcon>
-            <ListItemText primary="User" />
+            <ListItemText primary="Student" />
           </ListItemButton>
         </NavLink>
 

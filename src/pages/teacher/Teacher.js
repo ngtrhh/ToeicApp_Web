@@ -12,15 +12,15 @@ const Teacher = () => {
 
   const getUsers = async () => {
     const list = await Api.getAllTeachers();
-    const parseList = list.map((item) =>
+    const parseList = list?.map((item) =>
       item.hasOwnProperty("allow") ? item : { ...item, allow: false }
     );
 
-    const temp1 = parseList.map((item, index) => ({
+    const temp1 = parseList?.map((item, index) => ({
       ...item,
       userId: item.id,
     }));
-    const temp2 = temp1.map((item, index) => ({ ...item, id: index + 1 }));
+    const temp2 = temp1?.map((item, index) => ({ ...item, id: index + 1 }));
     setUsers(temp2);
   };
 
@@ -68,7 +68,7 @@ const Teacher = () => {
       headerName: "Certificates",
       headerClassName: "bg-primary text-white",
       width: 150,
-      valueGetter: (value) => (value && value.length > 0 ? value : "----"),
+      valueGetter: (value) => (value && value?.length > 0 ? value : "----"),
     },
     {
       field: "university",
@@ -118,7 +118,7 @@ const Teacher = () => {
                 if (shouldDelete) {
                   await Api.deleteUser(params.userId.id);
                   setUsers(
-                    users.filter((record) => record.id != params.userId.id)
+                    users?.filter((record) => record.id != params.userId.id)
                   );
                 }
               }}
@@ -164,14 +164,14 @@ const Teacher = () => {
         rows={
           sign === 1
             ? users
-                .filter(
+                ?.filter(
                   (item) => item.allow === false || item.allow === undefined
                 )
-                .map((item2, index) => ({ ...item2, key: index + 1 }))
+                ?.map((item2, index) => ({ ...item2, key: index + 1 }))
             : sign === 2 &&
               users
-                .filter((item) => item.allow === true)
-                .map((item2, index) => ({ ...item2, key: index + 1 }))
+                ?.filter((item) => item.allow === true)
+                ?.map((item2, index) => ({ ...item2, key: index + 1 }))
         }
         disableColumnMenu
         disableRowSelectionOnClick

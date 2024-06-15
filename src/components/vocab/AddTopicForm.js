@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import "../styles/Vocab.css";
 import {
   Button,
   FormControl,
@@ -8,8 +7,10 @@ import {
   Select,
   TextField,
 } from "@mui/material";
+import api from "../../api/Api";
+import "../../styles/Vocab.css";
 
-const AddTopicForm = ({ complete, closeModal }) => {
+const AddTopicForm = ({ closeModal, setTopics, topics }) => {
   const [imageFile, setImageFile] = useState();
   const [topic, setTopic] = useState("");
   const [qty, setQty] = useState(null);
@@ -113,16 +114,25 @@ const AddTopicForm = ({ complete, closeModal }) => {
     } else return true;
   };
 
-  const handleComplete = () => {
+  const handleComplete = async () => {
     if (!validateData2()) return;
+
     const data = {
       Image: imageFile,
       Topic: topic,
       VocabQuantity: qty,
-      vocabs: vocabs,
     };
+
     setErrors("");
-    complete(data);
+
+    const res = await api.addVocabLesson(data);
+    setTopics([...topics, { ...data, Id: res }]);
+
+    closeModal();
+    for (let i = 0; i < vocabs.length; i++) {
+      let data1 = { ...vocabs[i], TopicId: res };
+      await api.addVocab(data1);
+    }
   };
 
   return (

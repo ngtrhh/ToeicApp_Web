@@ -10,6 +10,7 @@ function User() {
 
   const getUsers = async () => {
     const list = await api.getUsers();
+    console.log(list);
     for (let data of list) {
       if (data.currentScore) {
         if (data.currentScore >= 0 && data.currentScore <= 250) {
@@ -27,8 +28,15 @@ function User() {
         }
       }
     }
-    const addKey = list.map((item) => ({ ...item, userId: item.id }));
-    const temp = addKey.map((item, index) => ({ ...item, id: index + 1 }));
+
+    let parseList = [];
+    list?.map((item) => {
+      if (!item.hasOwnProperty("type") || item?.type !== "Teacher")
+        parseList.push(item);
+    });
+
+    const addKey = parseList?.map((item) => ({ ...item, userId: item.id }));
+    const temp = addKey?.map((item, index) => ({ ...item, id: index + 1 }));
 
     setUsers(temp);
   };
@@ -36,8 +44,6 @@ function User() {
   useEffect(() => {
     getUsers();
   }, []);
-
-  console.log(users);
 
   const columns = [
     {
@@ -58,22 +64,22 @@ function User() {
       flex: 1,
       headerClassName: "bg-primary text-white",
     },
-    {
-      field: "birthdate",
-      headerName: "DOB",
-      align: "center",
-      headerAlign: "center",
-      headerClassName: "bg-primary text-white",
-      valueGetter: (value) => (value ? value : "----"),
-    },
-    {
-      field: "score",
-      headerName: "Entry Score",
-      align: "center",
-      headerAlign: "center",
-      headerClassName: "bg-primary text-white",
-      valueGetter: (value) => (value ? value : "----"),
-    },
+    // {
+    //   field: "birthdate",
+    //   headerName: "DOB",
+    //   align: "center",
+    //   headerAlign: "center",
+    //   headerClassName: "bg-primary text-white",
+    //   valueGetter: (value) => (value ? value : "----"),
+    // },
+    // {
+    //   field: "score",
+    //   headerName: "Entry Score",
+    //   align: "center",
+    //   headerAlign: "center",
+    //   headerClassName: "bg-primary text-white",
+    //   valueGetter: (value) => (value ? value : "----"),
+    // },
     {
       field: "currentScore",
       headerName: "Current Score",
@@ -133,7 +139,9 @@ function User() {
 
   return (
     <div className="d-flex flex-column p-4 gap-4">
-      <div className="text-primary fw-semibold fs-5 text-uppercase">Users</div>
+      <div className="text-primary fw-semibold fs-5 text-uppercase">
+        Students
+      </div>
 
       <div className="d-flex flex-column bg-white">
         <DataGrid

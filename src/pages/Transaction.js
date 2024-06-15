@@ -60,6 +60,15 @@ const Transaction = () => {
       headerClassName: "bg-primary text-white",
     },
     {
+      field: "responseTime",
+      headerName: "Response Time",
+      width: 200,
+      align: "center",
+      headerAlign: "center",
+      headerClassName: "bg-primary text-white",
+      valueGetter: (value) => converttime(value),
+    },
+    {
       field: "amount",
       headerName: "Fee",
       align: "center",

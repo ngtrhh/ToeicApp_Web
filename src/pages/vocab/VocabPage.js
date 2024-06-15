@@ -1,14 +1,26 @@
 import React, { useState, useEffect } from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTrash, faPen } from "@fortawesome/free-solid-svg-icons";
+import {
+  Button,
+  FormControl,
+  IconButton,
+  InputLabel,
+  MenuItem,
+  Select,
+  TextField,
+} from "@mui/material";
+import { Add, Delete, Edit } from "@mui/icons-material";
+import { DataGrid, GridToolbar } from "@mui/x-data-grid";
+
 import { useLocation } from "react-router-dom";
 import api from "../../api/Api";
 import "../../styles/Vocab.css";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPen, faTrash } from "@fortawesome/free-solid-svg-icons";
 
 function VocabPage() {
   const data = useLocation()?.state;
   const [sign, setSign] = useState("");
-  const [vocabList, setVocabList] = useState([]);
+  const [vocabList, setVocabList] = useState(null);
   const [example, setExample] = useState("");
   const [spell, setSpell] = useState("");
   const [type, setType] = useState("n");
@@ -17,12 +29,16 @@ function VocabPage() {
   const [listenFile, setListenFile] = useState("");
   const [idVocab, setIdVocab] = useState("");
   const [openModal, setOpenModal] = useState(false);
-  const [searchVocab, setSearchVocab] = useState("");
   const [errors, setErrors] = useState("");
 
   const getListVocab = async () => {
     const res = await api.getVocabinLesson(data.TopicId);
-    setVocabList(res);
+    const list = res?.map((item, index) => ({
+      ...item,
+      id: index + 1,
+      key: index + 1,
+    }));
+    setVocabList(list);
   };
 
   useEffect(() => {
@@ -39,8 +55,6 @@ function VocabPage() {
       return false;
     }
   }
-
-  console.log(type);
 
   const validateData = () => {
     let errorFields = [];
@@ -77,6 +91,19 @@ function VocabPage() {
 
   const handleComplete = async () => {
     if (!validateData()) return;
+    const temp = {
+      id: vocabList?.length + 1,
+      key: vocabList?.length + 1,
+      Example: example,
+      Spelling: spell,
+      Type: type,
+      Vocab: vocab,
+      Translate: translate,
+      ListenFile: listenFile,
+      TopicId: data.TopicId,
+    };
+    setVocabList([...vocabList, temp]);
+    setOpenModal(false);
     await api.updateTopic(data.TopicId, {
       VocabQuantity: vocabList.length + 1,
     });
@@ -91,7 +118,6 @@ function VocabPage() {
     });
     getListVocab();
     setErrors("");
-    setOpenModal(false);
   };
 
   const handleComplete1 = async () => {
@@ -110,16 +136,111 @@ function VocabPage() {
     setOpenModal(false);
   };
 
-  return (
-    <div className="d-flex flex-column px-3">
-      <h3 className="ms-4 my-4 text-center fw-bold w-100">
-        Vocabularies in <span className="text-primary">{data.TopicName}</span>
-      </h3>
+  // const columns = [
+  //   {
+  //     field: "key",
+  //     headerName: "#",
+  //     width: 50,
+  //     headerClassName: "bg-primary text-white",
+  //   },
+  //   {
+  //     field: "Vocab",
+  //     headerName: "Vocabulary",
+  //     flex: 1,
+  //     headerClassName: "bg-primary text-white",
+  //   },
+  //   {
+  //     field: "Type",
+  //     headerName: "Type",
+  //     flex: 1,
+  //     headerClassName: "bg-primary text-white",
+  //   },
+  //   {
+  //     field: "Spelling",
+  //     headerName: "Phonetic Symbols",
+  //     flex: 1,
+  //     headerClassName: "bg-primary text-white",
+  //   },
+  //   {
+  //     field: "Translate",
+  //     headerName: "Translation",
+  //     flex: 1,
+  //     headerClassName: "bg-primary text-white",
+  //   },
+  //   {
+  //     field: "Example",
+  //     headerName: "Example",
+  //     flex: 1,
+  //     headerClassName: "bg-primary text-white",
+  //   },
+  //   {
+  //     field: "ListenFile",
+  //     headerName: "Audio File",
+  //     align: "center",
+  //     headerAlign: "center",
+  //     headerClassName: "bg-primary text-white",
+  //   },
+  //   {
+  //     field: "actions",
+  //     headerName: "",
+  //     align: "center",
+  //     headerClassName: "bg-primary text-white",
+  //     cellClassName: "d-flex justify-content-center",
+  //     renderCell: (params) => {
+  //       return (
+  //         <div>
+  //           <IconButton
+  //             className="color-primary"
+  //             onClick={async () => {
+  //               const row = params.row;
+  //               const shouldDelete = window.confirm(
+  //                 "Are you sure you want to delete this vocabulary?"
+  //               );
+  //               if (shouldDelete) {
+  //                 await api.updateTopic(data.TopicId, {
+  //                   VocabQuantity: vocabList.length - 1,
+  //                 });
+  //                 setVocabList(vocabList.filter((item) => item.Id !== row.Id));
+  //                 await api.deleteVocab(row.Id);
+  //               }
+  //             }}
+  //           >
+  //             <Delete />
+  //           </IconButton>
+  //           <IconButton
+  //             className="color-primary"
+  //             onClick={() => {
+  //               const row = params.row;
+  //               setSign("edit");
+  //               setIdVocab(row.Id);
+  //               setVocab(row.Vocab);
+  //               setListenFile(row.ListenFile);
+  //               setType(row.Type);
+  //               setSpell(row.Spelling);
+  //               setExample(row.Example);
+  //               setTranslate(row.Translate);
+  //               setOpenModal(true);
+  //             }}
+  //           >
+  //             <Edit />
+  //           </IconButton>
+  //         </div>
+  //       );
+  //     },
+  //   },
+  // ];
 
-      <div className="d-flex flex-row gap-3">
-        <button
-          type="button"
-          className="btn btn-light bg-secondary text-white"
+  return (
+    <div className="d-flex flex-column p-4 gap-4">
+      <div className="d-flex flex-row align-items-center gap-4">
+        <div className="text-primary fw-semibold fs-5 text-uppercase">
+          Vocabularies in{" "}
+          <span className="text-dark">{data.TopicName} Topic</span>
+        </div>
+        <div style={{ flexGrow: 1 }} />
+        <Button
+          className="shadow-none bg-secondary "
+          variant="contained"
           onClick={() => {
             setSign("add");
             setVocab("");
@@ -130,19 +251,10 @@ function VocabPage() {
             setTranslate("");
             setOpenModal(true);
           }}
+          startIcon={<Add />}
         >
-          Add Vocabulary
-        </button>
-        {/* <button type="button" className="btn btn-light bg-primary text-white">
-          Search
-        </button>
-        <input
-          style={{ minWidth: "250px", height: "40px" }}
-          type="text"
-          onChange={(e) => setSearchVocab(e.target.value)}
-          value={searchVocab}
-          placeholder="Enter a vocabulary"
-        /> */}
+          Add Topic
+        </Button>
       </div>
 
       <div>
@@ -159,7 +271,7 @@ function VocabPage() {
             </tr>
           </thead>
           <tbody>
-            {vocabList?.map((each, key) => {
+            {vocabList?.map((each) => {
               return (
                 <tr key={each?.Id}>
                   <td>{each?.Vocab}</td>
@@ -212,6 +324,38 @@ function VocabPage() {
         </table>
       </div>
 
+      {/* <DataGrid
+        className="bg-white"
+        columns={columns}
+        rows={vocabList}
+        disableColumnMenu
+        disableRowSelectionOnClick
+        disableColumnFilter
+        disableColumnSelector
+        disableDensitySelector
+        slots={{ toolbar: GridToolbar }}
+        slotProps={{
+          toolbar: {
+            showQuickFilter: true,
+            printOptions: { disableToolbarButton: true },
+            csvOptions: { disableToolbarButton: true },
+          },
+        }}
+        sx={{
+          "& .MuiDataGrid-footerContainer": { display: "none" },
+          "& .MuiDataGrid-root": {
+            borderTopLeftRadius: "0 !important",
+            borderTopRightRadius: 0,
+          },
+          "& .MuiDataGrid-overlayWrapper": {
+            minHeight: "50px !important",
+          },
+          "& .MuiDataGrid-filler": {
+            display: "none",
+          },
+        }}
+      /> */}
+
       {openModal && (
         <div
           className="modal-container"
@@ -230,93 +374,83 @@ function VocabPage() {
               marginTop: "10%",
             }}
           >
-            <h2 className="text-center text-secondary">
+            <h2 className="text-center fw-semibold text-primary text-uppercase">
               {sign === "add" ? "Add" : "Update"} Vocabulary
             </h2>
-            <div className="d-flex flex-row mt-4 ms-4 align-items-center">
-              <div style={{ flex: 1 }}>Vocabulary:</div>
-              <input
-                type="text"
-                onChange={(e) => {
-                  if (sign !== "see") setVocab(e.target.value);
-                }}
-                value={vocab}
-                required
-              />
-            </div>
-            <div className="d-flex flex-row mt-4 ms-4 align-items-center">
-              <div style={{ flex: 1 }}>Audio File:</div>
-              <input
-                type="url"
-                onChange={(e) => {
-                  if (sign !== "see") setListenFile(e.target.value);
-                }}
-                value={listenFile}
-                required
-              />
-            </div>
-            <div className="d-flex flex-row mt-4 ms-4 align-items-center">
-              <div style={{ flex: 1 }}>Phonetic Symbols:</div>
-              <input
-                type="text"
-                onChange={(e) => {
-                  if (sign !== "see") setSpell(e.target.value);
-                }}
-                value={spell}
-                required
-              />
-            </div>
-            <div className="d-flex flex-row mt-4 ms-4 align-items-center">
-              <div style={{ flex: 1 }}>Type:</div>
-              <select
-                value={type}
-                onChange={(e) => setType(e.target.value)}
-                id="type"
-              >
-                <option value="n">n</option>
-                <option value="v">v</option>
-                <option value="adj">adj</option>
-                <option value="adv">adv</option>
-                <option value="prep">prep</option>
-                <option value="conj">conj</option>
-              </select>
-            </div>
-            <div className="d-flex flex-row mt-4 ms-4 align-items-center">
-              <div style={{ flex: 1 }}>Example:</div>
-              <textarea
-                rows={2}
-                type="text"
-                onChange={(e) => {
-                  if (sign !== "see") setExample(e.target.value);
-                }}
-                value={example}
-              />
-            </div>
-            <div className="d-flex flex-row mt-4 ms-4 align-items-center">
-              <div style={{ flex: 1 }}>Translation:</div>
-              <input
-                type="text"
-                onChange={(e) => {
-                  if (sign !== "see") setTranslate(e.target.value);
-                }}
-                value={translate}
-              />
-            </div>
+            <TextField
+              label="Vocabulary"
+              onChange={(e) => {
+                if (sign !== "see") setVocab(e.target.value);
+              }}
+              value={vocab}
+              fullWidth
+            />
+            <TextField
+              className="mt-4"
+              type="url"
+              label="Audio File"
+              onChange={(e) => {
+                if (sign !== "see") setListenFile(e.target.value);
+              }}
+              value={listenFile}
+              fullWidth
+            />
+            <TextField
+              className="mt-4"
+              label="Phonetic Symbols"
+              onChange={(e) => {
+                if (sign !== "see") setSpell(e.target.value);
+              }}
+              value={spell}
+              fullWidth
+            />
+            <FormControl fullWidth className="mt-4">
+              <InputLabel>Type</InputLabel>
+              <Select value={type} onChange={(e) => setType(e.target.value)}>
+                {["n", "v", "adj", "adv", "prep", "conj"].map((item, index) => (
+                  <MenuItem value={item} key={index}>
+                    {item}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+            <TextField
+              className="mt-4"
+              label="Example"
+              multiline
+              rows={2}
+              type="text"
+              onChange={(e) => {
+                if (sign !== "see") setExample(e.target.value);
+              }}
+              value={example}
+              fullWidth
+            />
+            <TextField
+              className="mt-4"
+              label="Translation"
+              onChange={(e) => {
+                if (sign !== "see") setTranslate(e.target.value);
+              }}
+              value={translate}
+              fullWidth
+            />
 
             {errors && <div className="error">{errors}</div>}
             {sign === "add" && (
-              <button
-                type="button"
-                className="btn btn-light bg-secondary text-white d-block m-auto mt-3"
-                style={{ width: 100 }}
-                onClick={
-                  sign === "add"
-                    ? handleComplete
-                    : sign === "edit" && handleComplete1
-                }
-              >
-                {sign === "add" ? "Submit" : sign === "edit" && "Update"}
-              </button>
+              <div className="d-flex mt-4 align-items-center justify-content-center">
+                <Button
+                  variant="contained"
+                  className="shadow-none bg-secondary"
+                  onClick={
+                    sign === "add"
+                      ? handleComplete
+                      : sign === "edit" && handleComplete1
+                  }
+                >
+                  {sign === "add" ? "Submit" : sign === "edit" && "Update"}
+                </Button>
+              </div>
             )}
           </div>
         </div>

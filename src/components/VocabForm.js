@@ -1,6 +1,7 @@
 import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash, faEye, faPen } from "@fortawesome/free-solid-svg-icons";
+
 const VocabForm = ({ item, eye, pen, Delete }) => {
   return (
     <div
